@@ -28,7 +28,7 @@ const server = require('@server/httpServer').httpServer({
 })
 /*****************************************************************************/
 const appStatus = require('@src/appStatus').appStatus
-const weirdWorld = require('@src/weirdWorld').weirdWorld
+const weirdWorld = require('@src/weirdworld').weirdWorld
 weirdWorld.ready({
      appStatus
     })

@@ -1,0 +1,23 @@
+
+<script>
+// Get the Sidebar
+var leftNav = document.getElementById("leftNav");
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+  if (leftNav.style.display === 'block') {
+    leftNav.style.display = 'none';
+    overlayBg.style.display = "none";
+  } else {
+    leftNav.style.display = 'block';
+    overlayBg.style.display = "block";
+  }
+}
+// Close the sidebar with the close button
+function w3_close() {
+  leftNav.style.display = "none";
+  overlayBg.style.display = "none";
+}
+</script>
+<script src='/javascripts/bundle.js'></script>

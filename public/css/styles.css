@@ -1,0 +1,145 @@
+:root{
+    --main: rgba(221, 220, 198, 0.986);
+    --pop: #009494; 
+    --snaple: #F70000;
+    --crash: #f77000;
+    --sky: #3358AF;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+html,body,h1,h2,h3,h4,h5 {
+    font-family: "Raleway", sans-serif;
+}
+
+body{
+    background-color: var(--main);
+}
+.flex-container {
+  display:flex; 
+  flex-direction: row;
+  flex-wrap:wrap;
+  justify-content: space-around;  
+  align-items: stretch; 
+}
+#demo-canvas{
+  flex:45%;
+  max-width:45%;
+  padding-right:10px; 
+  height:800px;
+  font-size:19px; 
+  margin-top:20px;
+}
+#discoverPane{
+  flex:50%; 
+  max-width:50%; 
+}
+.hidden{
+  display: none; 
+  opacity: 0; 
+}
+
+.topNav{
+    background-color: #990000; 
+    z-index:4;
+    height:45px
+}
+
+.topPanel{
+  padding-top:10px;
+}
+.leftNav{
+    z-index:3; 
+    width:180px;
+    background-color: #009494; 
+    padding-top: 40px; 
+} 
+.leftNav P{
+    color:#990000; 
+    font-weight:bold; 
+    font-size: 1.3em;
+}
+.leftNavIcon{
+   color: var(--main);
+}
+
+#findCountryButton{
+  margin-top:10px;
+  background-color: var(--main);
+  color: var(--crash);
+  font-size:2em;
+  border: black 1px inset;
+}
+
+#findCountryInput{
+  font-size:2em;
+  margin-top:5px;
+  border-top: var(--sky) 1px inset; 
+  border-bottom: black 1px inset;
+}
+
+#formDiscover{
+  z-index: 5;
+}
+
+.content H1{
+    color:#172568;
+    font-family:Bangers;
+    font-size: 3.3em;
+    letter-spacing:4px;
+}
+.countryCard {
+    cursor: pointer;
+    padding-right:20px; 
+    padding-bottom:10px; 
+    text-align:right;
+    color: var(--main);
+    width:100%;
+}
+
+.countryCard:hover {
+  background-color: var(--crash);
+  color:var(--sky)
+}
+.discovered {
+  background-color: var(--sky); 
+}
+.selected {
+  background-color: var(--snaple); 
+}
+
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 100px;
+    height: 100px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+
+  .tenantSelection{
+    width:120px; 
+    text-align:right 
+  }
+
+ .groupCmd {
+    cursor: pointer
+ }
+
+.settingsItem {
+  cursor: pointer
+}
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

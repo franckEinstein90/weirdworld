@@ -1,0 +1,53 @@
+<!------------------------------------
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ * entry point
+ *
+------------------------------------->
+<!DOCTYPE html>
+<html lang="en">
+
+    <title>{{title}}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0, initial-scale=1">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bangers">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>  
+    <script src="/javascripts/jsnetworkx.js"></script>
+    <body> 
+
+    <div class="w3-bar w3-top w3-large topNav hidden"> 
+        <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();">
+          <i class="fa fa-bars"></i>  
+        </button>
+    </div>
+
+    {{>nav/bottomStatusBar}}
+    {{>nav/leftNav}}
+
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" 
+     onclick="w3_close()" style="cursor:pointer"
+     title="close side menu" id="myOverlay">
+</div>
+
+<div class="w3-main" style="margin-left:260px;margin-right:10px">
+    {{{body}}}
+</div>
+
+
+{{>scripts/scripts}}
+
+</body>
+</html>
+

@@ -1,0 +1,40 @@
+ <!-- Sidebar/menu -->
+
+<nav class="w3-sidebar w3-collapse w3-animate-left w3-center leftNav" 
+     style="" id="leftNav">
+
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">
+    <i class="fa fa-globe w3-xxxlarge leftNavIcon"></i>
+    <p>DISCOVER</p>
+  </a>
+
+ <a  ID="manageUsersBtn" onclick="document.getElementById('userGroupsModal').style.display='block'" 
+    class="w3-bar-item w3-button w3-padding-large">
+    <i class="fa fa-bus w3-xxxlarge leftNavIcon"></i>
+    <p>TRAVEL</p>
+  </a>
+
+  <a  onclick="document.getElementById('appSettingsModal').style.display='block'"
+	  class="w3-bar-item w3-button w3-padding-large">
+      <i class="fa fa-bed w3-xxxlarge leftNavIcon"></i>
+      <p>STAY</p>
+  </a>
+
+
+  <a  href="#userMgtSection" 
+    class="w3-bar-item w3-button w3-padding-large">
+    <i class="fa fa-money w3-xxxlarge leftNavIcon"></i>
+    <p>BUDGET</p>
+  </a>
+
+  <hr style="color:white"/>
+
+  <p>FAVORITES:</p>
+  <center>
+    <div id="loadingIndicator" style="display:none">
+    <p>loading</p>
+    <div class="loader"></div>
+    </div>
+  </center>
+
+</nav>

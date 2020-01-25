@@ -1,0 +1,74 @@
+{
+  "id": "b5abe2b5-bf5c-49ac-8e57-5e403ccaccdb",
+  "version": "2.0",
+  "name": "seleniumTests",
+  "url": "http://localhost:3000",
+  "tests": [{
+    "id": "af32ebca-f16e-46f2-8391-75be2b059fc3",
+    "name": "search for ml",
+    "commands": [{
+      "id": "43ebb519-f228-4103-95b1-2e790a58246b",
+      "comment": "",
+      "command": "open",
+      "target": "/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "79f70348-5edb-4e09-81d0-12498a337c43",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1616x1216",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ed64b86f-7bfc-4164-94e4-7208cb714d68",
+      "comment": "",
+      "command": "click",
+      "target": "id=findCountryInput",
+      "targets": [
+        ["id=findCountryInput", "id"],
+        ["css=#findCountryInput", "css:finder"],
+        ["xpath=//input[@id='findCountryInput']", "xpath:attributes"],
+        ["xpath=//div[@id='topPanel']/center/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b2350363-e749-4849-9eb4-9b5c90ad6200",
+      "comment": "",
+      "command": "type",
+      "target": "id=findCountryInput",
+      "targets": [
+        ["id=findCountryInput", "id"],
+        ["css=#findCountryInput", "css:finder"],
+        ["xpath=//input[@id='findCountryInput']", "xpath:attributes"],
+        ["xpath=//div[@id='topPanel']/center/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "ml"
+    }, {
+      "id": "011da71e-8fea-48ae-80b5-2e2a5119992c",
+      "comment": "",
+      "command": "click",
+      "target": "id=findCountryButton",
+      "targets": [
+        ["id=findCountryButton", "id"],
+        ["css=#findCountryButton", "css:finder"],
+        ["xpath=//button[@id='findCountryButton']", "xpath:attributes"],
+        ["xpath=//div[@id='topPanel']/button", "xpath:idRelative"],
+        ["xpath=//div[4]/div/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "26de1127-ad1c-42c4-a7dd-00c5297f1d6e",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["af32ebca-f16e-46f2-8391-75be2b059fc3"]
+  }],
+  "urls": ["http://localhost:3000/"],
+  "plugins": []
+}

@@ -2,7 +2,8 @@
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
  *
- *
+ * appRoot is a user's entry into the 
+ * app
  * ***************************************************************************/
 "use strict"
 
@@ -18,7 +19,7 @@ let options = country => {
         url: `https://restcountries-v1.p.rapidapi.com/name/${country}`,
         headers: {
             'x-rapidapi-host': 'restcountries-v1.p.rapidapi.com',
-            'x-rapidapi-key': weirdWorld.rapidapiKey
+            'x-rapidapi-key': weirdWorld.rapidApiKey()
         }
     }
 }
@@ -27,6 +28,7 @@ let options = country => {
 const appRoot = (function() {
 
     return {
+
         render: function(req, res, next) {
 
             let pageData = {
@@ -38,7 +40,7 @@ const appRoot = (function() {
 
             request(options('uk'), function(error, response, body) {
                 if (error) throw new Error(error);
-                pageData.countryInfo = JSON.parse(body)
+                pageData.myCountries = JSON.parse(body)
 
                 if (appStatus.running()) {
                     pageData.state = 'running'
@@ -47,6 +49,13 @@ const appRoot = (function() {
             })
         }, 
 
+        getUserData: function(req, res, next) {
+            let userData = {
+                    countryCodes: ['MLI', 'BHR', 'PRI', 'WSM']
+            }
+            res.send( userData )
+        },
+ 
         countryInfo: function(req, res, next) {
             let countryName = req.query.country
             request(options(countryName), function(error, response, body) {

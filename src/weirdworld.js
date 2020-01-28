@@ -16,16 +16,15 @@ const config = require('config')
 /*****************************************************************************/
 
 const weirdWorld = (function() {
-    
-    const rapidApiKey = config.get('rapidAPIKey')
+    let _rapidApiKey = null 
     return {
-        rapidApiKey : _ => _rapidApiKey, 
         ready: function({
-            appStatus
+            appStatus, 
+            rapidApiKey
         }) {
-            debugger
+            _rapidApiKey = rapidApiKey
         },
-
+        rapidApiKey : _ => _rapidApiKey, 
         run: function() {
 
         }

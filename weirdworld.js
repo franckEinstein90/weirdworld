@@ -9,6 +9,11 @@
 
 /*****************************************************************************/
 require('module-alias/register')
+const config = require('config')
+let rapidApiKey = config.get('rapidAPIKey')
+/*****************************************************************************/
+
+
 const path = require('path')
 /*****************************************************************************/
 const app = require('@server/expressStack').expressStack({
@@ -19,6 +24,7 @@ const app = require('@server/expressStack').expressStack({
 /*****************************************************************************/
 /*****************************************************************************/
 const routingSystem = require('@server/routingSystem').routingSystem({
+    rapidApiKey,
     app
 })
 /*****************************************************************************/
@@ -30,5 +36,6 @@ const server = require('@server/httpServer').httpServer({
 const appStatus = require('@src/appStatus').appStatus
 const weirdWorld = require('@src/weirdworld').weirdWorld
 weirdWorld.ready({
-     appStatus
+     appStatus, 
+     rapidApiKey
     })

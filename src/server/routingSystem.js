@@ -35,6 +35,7 @@ const routingSystem = function({
     app.use('/', router)
 
     router.get('/', appRoot.render)
+    router.get('/userData', appRoot.getUserData)
     router.get('/countryInfo', appRoot.countryInfo)
     router.get('/appStatus', appStatus.report)
 

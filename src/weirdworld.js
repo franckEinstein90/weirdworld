@@ -12,17 +12,31 @@
 "use strict"
 
 /*****************************************************************************/
-const config = require('config')
+const config    = require('config')
+/*****************************************************************************/
+const db = require('@server/db').db
 /*****************************************************************************/
 
 const weirdWorld = (function() {
+
     let _rapidApiKey = null 
+    let _initApplication = function({
+        dbOn
+    }){
+    }
+
     return {
         ready: function({
             appStatus, 
             rapidApiKey
         }) {
             _rapidApiKey = rapidApiKey
+            db.ready({
+                filePath: 'settings.db'
+            })
+            .then( dbOn =>  _initApplication({
+                dbOn
+            }))
         },
         rapidApiKey : _ => _rapidApiKey, 
         run: function() {

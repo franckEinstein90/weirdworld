@@ -10,7 +10,7 @@
  /****************************************************************************/
  /****************************************************************************/
 const countries = require('./country').countries
-const users = require('./users').users
+const user = require('./users').user
 const discoverPane = require('./ui/discoverPane.js').discoverPane
  /****************************************************************************/
 
@@ -48,8 +48,10 @@ let getCountryInfo = function(countryInput){
 }
 
 $(function() {
-    users.ready()  
+
+    user.ready()  
     discoverPane.ready()
+
     let el = document.getElementById('items')
     let sortable = Sortable.create(el) 
 

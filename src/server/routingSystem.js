@@ -4,16 +4,16 @@
  *
  *
  * ***************************************************************************/
-
 "use strict"
 
 /*****************************************************************************/
-const express = require('express')
-const cors = require('cors')
-const appRoot = require('@routes/appRoot').appRoot
+const express   = require('express')
+const cors      = require('cors')
+const appRoot   = require('@routes/appRoot').appRoot
 const appStatus = require('@src/appStatus').appStatus
 /*****************************************************************************/
-
+const user = require('@user/user').user
+/*****************************************************************************/
 const whiteList = []
 
 const corsOptions = {
@@ -32,12 +32,20 @@ const routingSystem = function({
 }) {
 
     let router = express.Router()
-    app.use('/', router)
 
+    let _setUserRoutes = () => {
+        router.get('/userData'      , user.getData )
+        router.post('/newTrip'      , user.postNewTrip)
+        router.get('/trips'          , user.getTrip )
+    }
+
+
+    app.use('/', router)
     router.get('/', appRoot.render)
-    router.get('/userData', appRoot.getUserData)
-    router.get('/countryInfo', appRoot.countryInfo)
-    router.get('/appStatus', appStatus.report)
+
+    _setUserRoutes() 
+    router.get('/countryInfo'   , appRoot.countryInfo )
+    router.get('/appStatus'     , appStatus.report )
 
     app.use(function(req, res, next) {
         next(createError(404));

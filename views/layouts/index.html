@@ -1,0 +1,246 @@
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+<style>
+body {
+  overflow-x: hidden;
+}
+
+
+/* Sidebar */
+
+#sidebar {
+  -webkit-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+  padding: 15px;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 999;
+}
+
+#content {
+  -webkit-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+}
+
+.sidebar-opened #content {
+  margin-left: 250px;
+}
+
+@media (max-width: 992px) {
+  #sidebar {
+    margin-left: -251px;
+  }
+}
+
+@media (min-width: 992px) {
+  #content {
+    margin-left: 250px;
+  }
+}
+
+
+/* Hamburger Menu */
+
+.nav-trigger {
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  padding: 1rem;
+  display: inline-block;
+  z-index: 999;
+  position: absolute;
+  right: -45px;
+  top: 0;
+}
+
+.nav-trigger:hover .hamburger {
+  transition: transform 50ms;
+  transform: scale(.95);
+}
+
+.nav-trigger .hamburger {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  transition: transform 500ms ease-in-out;
+}
+
+.nav-trigger .hamburger::before,
+.nav-trigger .hamburger::after,
+.nav-trigger .hamburger .hamburger-icon {
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 2px;
+  background: #222;
+  transform-origin: 100% 50%;
+  transition: transform .5s;
+}
+
+.nav-trigger .hamburger::before {
+  top: 5px;
+}
+
+.nav-trigger .hamburger::after {
+  top: 17px;
+}
+
+.nav-trigger .hamburger .hamburger-icon {
+  width: 25px;
+  top: 11px;
+  transform-origin: 50% 50%;
+}
+
+.nav-trigger.is-active .hamburger::before,
+.nav-trigger.is-active .hamburger::after,
+.nav-trigger.is-active .hamburger .hamburger-icon {
+  background: #222;
+}
+
+.nav-trigger.is-active .hamburger::before {
+  transform: translate3d(-5px, 0px, 0) rotateZ(-45deg);
+}
+
+.nav-trigger.is-active .hamburger .hamburger-icon {
+  transform: rotateY(-90deg);
+}
+
+.nav-trigger.is-active .hamburger::after {
+  transform: translate3d(-5px, 5px, 0) rotateZ(45deg);
+}
+
+
+/* Navbar */
+
+.navbar-link {
+  padding: .5rem 1rem;
+  display: block;
+  color: #fff
+}
+
+.navbar-link:hover {
+  background-color: #eeeeee;
+  color: #02131f;
+  text-decoration: none;
+}
+
+i:hover {
+  color: #fff;
+}
+
+
+/* Content */
+
+.bg-golden {
+  background-color: #02131f;
+  color: #fff
+}
+
+.bg-fullscreen {
+  background-image: url(https://via.placeholder.com/1280x720.png/DCDCDC/fff);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  position: relative;
+  background-attachment: scroll;
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="main-container" id="wrapper">
+    <div class="d-flex vh-100">
+
+      <!-- Sidebar -->
+      <aside id="sidebar" class="side-panel d-flex flex-column h-100 bg-golden">
+        <!-- d-lg-none will hide the button on medium and large screens -->
+        <a id="navTrigger" class="d-lg-none nav-trigger" role="button" title="sweet hamburger">
+          <span class="hamburger">
+							<span class="hamburger-icon"></span>
+          </span>
+        </a>
+        <h5 class="sidebar-heading mt-5">AYMAN TARIG</h5>
+        <ul class="navbar-nav bd-navbar-nav py-5">
+          <li class="nav-item"><a class="navbar-link" href="#">HOME</a></li>
+          <li class="nav-item"><a class="navbar-link" href="#">ABOUT</a></li>
+          <li class="nav-item"><a class="navbar-link" href="#">ARTICLES</a></li>
+          <li class="nav-item"><a class="navbar-link" href="#">CONTACT</a></li>
+          </li>
+        </ul>
+        <div id="footer" class="mt-auto">
+          <small class="">Copyright ©2019 All rights reserved | Ayman Tarig</small>
+          <p class="pt-4">
+            <i class="fab fa-facebook-f p-2"></i>
+            <i class="fab fa-google-plus-g p-2"></i>
+          </p>
+        </div>
+      </aside>
+
+      <!-- Content -->
+      <div id="content" class="w-100">
+        <!-- seciton 1 -->
+        <div id="background" class="bg-fullscreen h-100">
+          <div class="container p-5 d-flex h-100">
+            <div class="row justify-content-center align-items-center">
+              <div class="col-12">
+                <h3 class="text-center text-dark pt-4">AYMAN TARIG</h3>
+                <h6 class="text-center text-secondary pb-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Accusantium, voluptatem sit? Nihil architecto deserunt, consequuntur distinctio expedita molestiae a, provident eos tenetur nostrum odit. Minus optio veritatis tenetur iure eos,
+                  officia dolorem sit obcaecati aliquam, ipsum beatae atque. Dolor, deleniti!</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- seciton 2 -->
+        <div class="section-2 bg-warning" style="height: 1000px">
+          <div class="container p-5 d-flex h-100 text-center">
+            <div class="row justify-content-center align-items-center">
+              <div class="col-12">
+                <h2 class="display-4">Another section</h2>
+                <h6 class="lead">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Accusantium, voluptatem sit? Nihil architecto deserunt, consequuntur distinctio expedita molestiae a, provident eos tenetur nostrum odit. Minus optio veritatis tenetur iure eos,
+                  officia dolorem sit obcaecati aliquam, ipsum beatae atque. Dolor, deleniti!</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- seciton 3 -->
+        <div class="section-3 bg-info" style="height: 1000px">
+          <div class="container p-5 d-flex h-100 text-center">
+            <div class="row justify-content-center align-items-center">
+              <div class="col-12">
+                <h2 class="display-4">Another section</h2>
+                <h6 class="lead">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Accusantium, voluptatem sit? Nihil architecto deserunt, consequuntur distinctio expedita molestiae a, provident eos tenetur nostrum odit. Minus optio veritatis tenetur iure eos,
+                  officia dolorem sit obcaecati aliquam, ipsum beatae atque. Dolor, deleniti!</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var sidebar = $("#sidebar");
+var hamburger = $('#navTrigger');
+
+hamburger.click(function(e) {
+  e.preventDefault();
+  $(this).toggleClass('is-active');
+  // This will add `sidebar-opened`
+  $('#wrapper').toggleClass("sidebar-opened");
+  // Remove magin left
+  sidebar.toggleClass('ml-0');
+});
+
+</script>
+</body>
+</html>

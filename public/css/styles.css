@@ -15,59 +15,135 @@ html,body,h1,h2,h3,h4,h5 {
 }
 
 body{
-    background-color: var(--main);
+  background-color: var(--main);
+  margin: 0;
+  font-family: "Lato", sans-serif;
 }
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  padding-top: 40px; 
+  width: 400px;
+  background-color: #009494; 
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+}
+ 
+.sidebar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+.sidebar P{
+    color:#990000; 
+    font-weight:bold; 
+    font-size: 1.3em;
+}
+
+.leftNavIcon{
+   color: var(--main);
+}
+
+.topNav{
+    background-color: #990000; 
+    color: var(--main);
+    z-index:4;
+    height:45px; 
+    display: none;
+    padding-left:20px;
+}
+
+.topNav a {
+  display: block;
+  padding-top:10px;
+  text-decoration: underline;
+  cursor: pointer; 
+}
+ 
+.topNav sidebar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topNav sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+
+div.content {
+  margin-left: 400px;
+  padding: 1px 16px;
+  height: 1000px;
+}
+
+#userPane{
+  flex:50%;
+  max-width:100%;
+  padding-right:10px; 
+  height:800px;
+  font-size:19px; 
+}
+
+
+@media screen and (max-width: 1200px) {
+  .sidebar {
+    display:none;
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .sidebar a {float: left;}
+  .topNav {
+    display:block; 
+  }
+  div.content {margin-left: 0px;}
+}
+
+@media screen and (max-width: 1200px) {
+   .sidebar a {
+    text-align: center;
+    float: none;
+  }
+}
+
 .flex-container {
+  margin-top:45px;
+  width:100%; 
   display:flex; 
   flex-direction: row;
   flex-wrap:wrap;
   justify-content: space-around;  
   align-items: stretch; 
 }
-
-#userPane{
-  flex:45%;
-  max-width:45%;
-  padding-right:10px; 
-  height:800px;
-  font-size:19px; 
-  margin-top:20px;
-}
-
 #demo-canvas{
     height:800px; 
 }
 #discoverPane{
   flex:50%; 
-  max-width:50%; 
+  max-width:100%; 
 }
 .hidden{
   display: none; 
   opacity: 0; 
 }
 
-.topNav{
-    background-color: #990000; 
-    z-index:4;
-    height:45px
-}
-
 .topPanel{
   padding-top:10px;
-}
-.leftNav{
-    z-index:3; 
-    width:180px;
-    background-color: #009494; 
-    padding-top: 40px; 
-} 
-.leftNav P{
-    color:#990000; 
-    font-weight:bold; 
-    font-size: 1.3em;
-}
-.leftNavIcon{
-   color: var(--main);
 }
 
 #findCountryButton{

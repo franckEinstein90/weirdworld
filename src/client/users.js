@@ -19,22 +19,41 @@ const getUserInfo = function( callback ){
                 }
             })
 }
+
+
  
-const users = (function(){
+const user = (function(){
 
     let _countries = new Map()
+    let _trips = new Map()
+    let _userData = null
 
     let _processUserData = function(result, status, xhr){
-        result.countryCodes.forEach(code => _countries.set(code, 1))
+        _userData = result
+        debugger
     }
 
     return{
        ready: function( ){
-            let userData = getUserInfo( _processUserData)
+
+            $('#userTripList').DataTable({
+                paging: false, 
+                searching: false,
+                select: true
+            })
+
+           $('#topNavNewTripTrigger').click( event => {
+                event.preventDefault()
+            
+           })
+
+           getUserInfo( _processUserData )
        }  
     }
 })()
 
+
+
 module.exports = {
-    users
+    user
 }

@@ -10,7 +10,7 @@
 /*****************************************************************************/
 require('module-alias/register')
 const config = require('config')
-let rapidApiKey = config.get('rapidAPIKey')
+const rapidApiKey = config.get('rapidAPIKey')
 /*****************************************************************************/
 
 

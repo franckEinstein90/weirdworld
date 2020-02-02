@@ -7,16 +7,24 @@
    </header>
 
 
-    <div class="w3-container" id='topPanel'>
-        {{>forms/discover}}
-    </div>
-
    <div class="flex-container"> 
-            <div id="demo-canvas"> 
-            </div>
-          
-            <div id="discoverPane">
+           {{>userPane}}
+           <div id="rightPane">
+
+         <h2>Selected</h2>
+         <ul id="items">
+            <li>item 1</li>
+            <li>item 2</li>
+            <li>item 3</li>
+        </ul>
+           
+                <div class="w3-container" id='topPanel'>
+                    {{>forms/discover}}
+                </div>
+
+               <div id="discover">
                {{>countryCards}}
+               </div>
             </div>
     </div>
 

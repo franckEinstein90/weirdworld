@@ -24,13 +24,18 @@ body{
   justify-content: space-around;  
   align-items: stretch; 
 }
-#demo-canvas{
+
+#userPane{
   flex:45%;
   max-width:45%;
   padding-right:10px; 
   height:800px;
   font-size:19px; 
   margin-top:20px;
+}
+
+#demo-canvas{
+    height:800px; 
 }
 #discoverPane{
   flex:50%; 

@@ -8,8 +8,10 @@
 "use strict"
 
  /****************************************************************************/
+ /****************************************************************************/
 const countries = require('./country').countries
 const users = require('./users').users
+const discoverPane = require('./ui/discoverPane.js').discoverPane
  /****************************************************************************/
 
 const maxPopulation = 1501590000
@@ -18,41 +20,20 @@ let population = function(population) {
     return `Population: <span style='color:red'>${population}</span>`
 }
 
-let newCountryCard = function({
-    countryCode, 
-    country
-}) {
-
-    return [
-        `<div class='w3-card countryCard discovered' style='margin-top:20px'>`,
-        `<DIV style='display:flex'>`, 
-             `<DIV style="text-align:left;width:200px; color:blue; background-color:yellow; margin-left:5px">`, 
-                `<h3>${country.region}</h3>`, 
-                country.subregion, 
-             `</DIV>`, 
-
-             `<DIV style="padding-left:20px; text-align:left">`, 
-                    `<h2>${country.name}</h2>`,
-             `</DIV>`, 
-        `</DIV>`,
-        `<DIV>Borders: ${country.borders.map(b => "<b>" + b + "</b>")}</DIV>`,
-        '</div>'
-    ].join('')
-}
-
 let searchResponse = function(data, textStatus, jqXHR) {
-    $('#discoverPane').empty()
+    discoverPane.empty()
     data.forEach(country => {
         let countryObject = countries.add({
             countryInfo: country
         })
     })
+
     countries.forEach((country, countryCode) => {
-        $('#discoverPane').append(newCountryCard({
-            country,
+        discoverPane.addCard({
+            country, 
             countryCode
-        }))
-    })
+        })
+   })
 }
 
 let getCountryInfo = function(countryInput){
@@ -67,7 +48,10 @@ let getCountryInfo = function(countryInput){
 }
 
 $(function() {
-    users.ready()   
+    users.ready()  
+    discoverPane.ready()
+    let el = document.getElementById('items')
+    let sortable = Sortable.create(el) 
 
     let G = new jsnx.Graph();
     G.addNodesFrom([

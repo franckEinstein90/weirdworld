@@ -8,6 +8,20 @@
  * ***************************************************************************/
 "use strict"
 
+class Country{
+    constructor({
+        alpha3Code,  //3 letter code for country
+        borders,     //
+        region,      // 
+        continent,   //
+        nativeName, 
+        englishName 
+    }){
+        this.alpha3Code = alpha3Code
+    }
+}
+
+
 const countries = (function() {
 
     let _countries = new Map()
@@ -18,11 +32,22 @@ const countries = (function() {
         }) {
             return _countries.has(countryCode)
         },
+
         add: function({
             countryInfo
         }) {
+            let country = new Country({
+                alpha3Code: countryInfo.alpha3Code,
+                borders: countryInfo.borders, 
+                region: countryInfo.subregion, 
+                continent: countryInfo.region,
+                nativeName: countryInfo.nativeName, 
+                englishName: countryInfo.name 
+                 
+            })
             _countries.set(countryInfo.alpha3Code, countryInfo)
         },
+
         forEach:  callback => _countries.forEach( callback )            
     }
 })()
@@ -43,8 +68,10 @@ module.exports = {
 "use strict"
 
  /****************************************************************************/
+ /****************************************************************************/
 const countries = require('./country').countries
 const users = require('./users').users
+const discoverPane = require('./ui/discoverPane.js').discoverPane
  /****************************************************************************/
 
 const maxPopulation = 1501590000
@@ -53,41 +80,20 @@ let population = function(population) {
     return `Population: <span style='color:red'>${population}</span>`
 }
 
-let newCountryCard = function({
-    countryCode, 
-    country
-}) {
-
-    return [
-        `<div class='w3-card countryCard discovered' style='margin-top:20px'>`,
-        `<DIV style='display:flex'>`, 
-             `<DIV style="text-align:left;width:200px; color:blue; background-color:yellow; margin-left:5px">`, 
-                `<h3>${country.region}</h3>`, 
-                country.subregion, 
-             `</DIV>`, 
-
-             `<DIV style="padding-left:20px; text-align:left">`, 
-                    `<h2>${country.name}</h2>`,
-             `</DIV>`, 
-        `</DIV>`,
-        `<DIV>Borders: ${country.borders.map(b => "<b>" + b + "</b>")}</DIV>`,
-        '</div>'
-    ].join('')
-}
-
 let searchResponse = function(data, textStatus, jqXHR) {
-    $('#discoverPane').empty()
+    discoverPane.empty()
     data.forEach(country => {
         let countryObject = countries.add({
             countryInfo: country
         })
     })
+
     countries.forEach((country, countryCode) => {
-        $('#discoverPane').append(newCountryCard({
-            country,
+        discoverPane.addCard({
+            country, 
             countryCode
-        }))
-    })
+        })
+   })
 }
 
 let getCountryInfo = function(countryInput){
@@ -102,7 +108,10 @@ let getCountryInfo = function(countryInput){
 }
 
 $(function() {
-    users.ready()   
+    users.ready()  
+    discoverPane.ready()
+    let el = document.getElementById('items')
+    let sortable = Sortable.create(el) 
 
     let G = new jsnx.Graph();
     G.addNodesFrom([
@@ -181,7 +190,70 @@ $(function() {
 
 })
 
-},{"./country":1,"./users":3}],3:[function(require,module,exports){
+},{"./country":1,"./ui/discoverPane.js":3,"./users":4}],3:[function(require,module,exports){
+/******************************************************************************
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ *
+ * ***************************************************************************/
+"use strict"
+
+ /****************************************************************************/
+ /****************************************************************************/
+let newCountryCard = function({
+    countryCode, 
+    country
+}) {
+
+    return [
+        `<div class='w3-card countryCard discovered' style='margin-top:20px'>`,
+        `<DIV style='display:flex'>`, 
+             `<DIV style="text-align:left;width:200px; color:blue; background-color:yellow; margin-left:5px">`, 
+                `<h3>${country.region}</h3>`, 
+                country.subregion, 
+             `</DIV>`, 
+
+             `<DIV style="padding-left:20px; text-align:left">`, 
+                    `<h2>${country.name}</h2>`,
+             `</DIV>`, 
+        `</DIV>`,
+        `<DIV>Borders: ${country.borders.map(b => "<b>" + b + "</b>")}</DIV>`,
+        '</div>'
+    ].join('')
+}
+
+
+const discoverPane = (function(){
+
+    let $discoverPane = null
+
+    return {
+        ready: function(){
+            $discoverPane = $('#discover')
+        }, 
+        empty: function(){
+            $discoverPane.empty()
+        },
+        addCard: function({
+            country, 
+            countryCode
+            }){
+            $discoverPane.append(newCountryCard({
+                country,
+                countryCode
+          }))
+        }
+    }
+})()
+
+module.exports = {
+    discoverPane
+}
+
+
+
+},{}],4:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000

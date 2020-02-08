@@ -22,7 +22,7 @@ const expressStack = function({
 
     let app = express()
     require('@viewSystem/viewSystem').viewSystem({
-        app,
+        app,  
         root,
         layoutsDir:  path.join(root,'views','layouts/'),
         partialsDir: path.join(root,'views','partials/')
@@ -33,9 +33,9 @@ const expressStack = function({
     app.use(express.urlencoded({
         extended: false
     }))
+
     app.use(express.static(staticFolder))
     app.use(favicon(faviconPath))
-
 
     return app
 }

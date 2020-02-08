@@ -7,11 +7,14 @@
 "use strict"
 
 /*****************************************************************************/
-const express   = require('express')
-const cors      = require('cors')
-const appRoot   = require('@routes/appRoot').appRoot
-const appStatus = require('@src/appStatus').appStatus
+const express     = require('express')
+const cors        = require('cors')
+const ExpressOIDC = require('@okta/oidc-middleware').ExpressOIDC
+const session     = require('express-session').session
 /*****************************************************************************/
+/*const appData = require('@src/appData').appData*/
+const appRoot   = require('@routes/appRoot').appRoot/*
+const appStatus = require('@src/appStatus').appStatus
 const user = require('@user/user').user
 /*****************************************************************************/
 const whiteList = []
@@ -30,22 +33,33 @@ const corsOptions = {
 const routingSystem = function({
     app
 }) {
-
+ /*   let oidc = new ExpressOIDC({
+        issuer: `${appData.oktaClientDomain}/oauth2/default`,
+        client_id: appData.oktaClientID,
+        client_secret: appData.oktaClientSecret,
+        appBaseUrl: appData.baseURL,
+        scope: 'openid profile',
+        post_logout_redirect_uri: appData.postLogoutRedirect 
+    })
+    app.use(session({
+        secret: appData.appSecret, 
+        resave: true, 
+        saveUninitialized: false
+    }))
+    app.use(oidc.router)*/
     let router = express.Router()
-
-    let _setUserRoutes = () => {
-        router.get('/userData'      , user.getData )
-        router.post('/newTrip'      , user.postNewTrip)
-        router.get('/trips'          , user.getTrip )
-    }
-
 
     app.use('/', router)
     router.get('/', appRoot.render)
+    /*
+    router.post('/login'   , user.login )
+    router.get('/userData' , oidc.ensureAuthenticated(), user.getData )
 
-    _setUserRoutes() 
+    router.post('/newTrip' , oidc.ensureAuthenticated(), user.postNewTrip)
+    router.get('/trips'    , oidc.ensureAuthenticated(), user.getTrip )
+
     router.get('/countryInfo'   , appRoot.countryInfo )
-    router.get('/appStatus'     , appStatus.report )
+    router.get('/appStatus'     , oidc.ensureAuthenticated(), appStatus.report )
 
     app.use(function(req, res, next) {
         next(createError(404));
@@ -60,7 +74,7 @@ const routingSystem = function({
         // render the error page
         res.status(err.status || 500);
         res.render('error');
-    })
+    })*/
 }
 
 module.exports = {

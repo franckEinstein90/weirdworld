@@ -5,37 +5,42 @@
  * entry point
  *
  * ***************************************************************************/
-                                "use strict"
+"use strict"
 
 /*****************************************************************************/
 require('module-alias/register')
-const config = require('config')
-const rapidApiKey = config.get('rapidAPIKey')
-/*****************************************************************************/
-
-
 const path = require('path')
 /*****************************************************************************/
-const app = require('@server/expressStack').expressStack({
-    root: __dirname, 
+const expressApp = require('@server/expressStack').expressStack({
+    root        : __dirname, 
     staticFolder: path.join(__dirname, 'public'), 
-    faviconPath: __dirname + '/public/LOGO139x139.png', 
+    faviconPath : __dirname + '/public/LOGO139x139.png', 
 })
-/*****************************************************************************/
-/*****************************************************************************/
-const routingSystem = require('@server/routingSystem').routingSystem({
-    rapidApiKey,
-    app
+
+require('@src/weirdworld').weirdWorld({
+    root    : __dirname, 
+    settings: 'settings.db'
 })
-/*****************************************************************************/
-const server = require('@server/httpServer').httpServer({
-    app,
-    defaultPort: '3000'
+.then( app => {
+    return require('@src/appEvents').appEvents( app )
 })
-/*****************************************************************************/
-const appStatus = require('@src/appStatus').appStatus
-const weirdWorld = require('@src/weirdworld').weirdWorld
-weirdWorld.ready({
-     appStatus, 
-     rapidApiKey
-    })
+.then( app => {   
+    return require('@src/appClock').appClock( app )
+})
+.then( app => {
+    return require('@users/users').users( app )
+}) 
+.then( app => app.run(app))
+
+
+require('@server/routingSystem').routingSystem({
+    app : expressApp
+})
+
+require('@server/httpServer').httpServer({
+   app  : expressApp,
+   port: '3000'
+})
+    
+
+

@@ -9,6 +9,7 @@
 
 /*****************************************************************************/
 const appStatus = require('@src/appStatus').appStatus
+const appData   = require('@src/appData').appData
 const request = require("request")
 const weirdWorld = require('@src/weirdworld').weirdWorld
 /*****************************************************************************/
@@ -19,7 +20,7 @@ let options = country => {
         url: `https://restcountries-v1.p.rapidapi.com/name/${country}`,
         headers: {
             'x-rapidapi-host': 'restcountries-v1.p.rapidapi.com',
-            'x-rapidapi-key': weirdWorld.rapidApiKey()
+            'x-rapidapi-key': appData.rapidApiKey
         }
     }
 }

@@ -13,23 +13,26 @@
 /*****************************************************************************/
 const sqlite3 = require('sqlite3').verbose()
 /*****************************************************************************/
+const appData = require('@src/appData').appData
+/*****************************************************************************/
 const db = (function(){
 
     let _db = null
 
     return {
 
-        ready: function({
+        configure: function({
             filePath
         }){
             return new Promise(( resolve, reject) => {
-                _db = new sqlite3.Database(filePath, err => {
-                    if ( err ) {
-                        reject( err )
-                    } else {
-                        return resolve(true)
-                    }
-                })
+                _db = new sqlite3.Database(
+                    filePath, err => {
+                        if ( err ) {
+                            resolve( false )
+                        } else {
+                            return resolve(true)
+                        }
+                    })
             })
         }, 
         
@@ -60,10 +63,10 @@ const db = (function(){
 
         getRecord: function({
             table, 
-            selectStatement
+            select
         }){
             return new Promise((resolve, reject)=>{
-                let SQLStatement = `SELECT * FROM ${table} WHERE ${selectStatement};`
+                let SQLStatement = `SELECT * FROM ${table} WHERE ${select};`
                 _db.all(SQLStatement, (err, rows)=>{
                     if( err ){
                         reject( err )

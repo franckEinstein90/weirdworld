@@ -192,7 +192,7 @@ $(function() {
 
 })
 
-},{"./country":1,"./ui/discoverPane.js":3,"./users":4}],3:[function(require,module,exports){
+},{"./country":1,"./ui/discoverPane.js":3,"./users":5}],3:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -256,6 +256,46 @@ module.exports = {
 
 
 },{}],4:[function(require,module,exports){
+"use strict"
+
+const modalBoilerPlate = [
+   `<div class="w3-modal" style="display='block'>`, 
+      `<div class="w3-modal-content">`, 
+         `<div class="w3-container">`, 
+         `<span onclick="document.getElementById('id01').style.display='none'"`, 
+            `class="w3-button w3-display-topright">&times;`, 
+         '</span>', 
+         '</div>', 
+      '</div>', 
+   '</div>'].join('')
+
+
+const modal = (function(){
+
+   let _modalLogin = {
+      title: "user login"
+   }
+
+   let _modalWindows = new Map()
+   _modalWindows.set("login", _modalLogin)
+
+   return{
+      showModal: function( modalId ){
+         let modalContent = _modalWindows.get(modalId) 
+         $('#modalTitle').text(modalContent.title)
+         document.getElementById('modalWindow').style.display='block'
+      }
+   }
+})()
+
+const showModal = function(modalId){
+//   let modalContent = 
+}
+
+module.exports = {
+   showModal: modal.showModal
+}
+},{}],5:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -264,7 +304,7 @@ module.exports = {
  *
  * ***************************************************************************/
 "use strict"
-
+const showModal = require('./ui/modal').showModal
  /****************************************************************************/
 
 const getUserInfo = function( callback ){
@@ -273,7 +313,6 @@ const getUserInfo = function( callback ){
                 url: "/userData",
                 success: callback, 
                 error: (xhr, stats, error)=>{
-                    debugger
                 }
             })
 }
@@ -288,11 +327,14 @@ const user = (function(){
 
     let _processUserData = function(result, status, xhr){
         _userData = result
-        debugger
     }
 
     return{
        ready: function( ){
+            $('#btnLoginOrRegister').click( event => {
+                event.preventDefault()
+                showModal('login')
+            })
 
             $('#userTripList').DataTable({
                 paging: false, 
@@ -316,4 +358,4 @@ module.exports = {
     user
 }
 
-},{}]},{},[2]);
+},{"./ui/modal":4}]},{},[2]);

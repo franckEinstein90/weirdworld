@@ -6,7 +6,7 @@
  *
  * ***************************************************************************/
 "use strict"
-
+const showModal = require('./ui/modal').showModal
  /****************************************************************************/
 
 const getUserInfo = function( callback ){
@@ -15,7 +15,6 @@ const getUserInfo = function( callback ){
                 url: "/userData",
                 success: callback, 
                 error: (xhr, stats, error)=>{
-                    debugger
                 }
             })
 }
@@ -30,11 +29,14 @@ const user = (function(){
 
     let _processUserData = function(result, status, xhr){
         _userData = result
-        debugger
     }
 
     return{
        ready: function( ){
+            $('#btnLoginOrRegister').click( event => {
+                event.preventDefault()
+                showModal('login')
+            })
 
             $('#userTripList').DataTable({
                 paging: false, 

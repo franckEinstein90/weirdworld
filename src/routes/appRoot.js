@@ -46,7 +46,7 @@ const appRoot = (function() {
                 if (appStatus.running()) {
                     pageData.state = 'running'
                 }
-                res.render('index', pageData)
+                res.render('user', pageData)
             })
         }, 
 

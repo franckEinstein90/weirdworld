@@ -1,0 +1,41 @@
+
+
+<!-- The Modal -->
+
+    
+
+
+    <div class="w3-bar w3-top w3-large topNav "> 
+        <a id="btnLoginOrRegister">Login or register</a>
+    </div>
+
+    {{>nav/leftNav}}
+
+    <div class="content" id="viewPort">
+
+        <div class="flex-container"> 
+
+           {{>userPane}}
+           <div id="rightPane">
+
+         <h2>Selected</h2>
+         <ul id="items">
+            <li>item 1</li>
+            <li>item 2</li>
+            <li>item 3</li>
+        </ul>
+           
+                <div class="w3-container" id='topPanel'>
+                    {{>forms/discover}}
+                </div>
+
+               <div id="discover">
+               {{>countryCards}}
+               </div>
+            </div>
+    </div>
+</div>
+
+    {{>scripts/scripts}}
+    
+

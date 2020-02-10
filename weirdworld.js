@@ -11,7 +11,8 @@
 require('module-alias/register')
 const path = require('path')
 /*****************************************************************************/
-const expressApp = require('@server/expressStack').expressStack({
+
+const expressStack = require('@server/expressStack').expressStack({
     root        : __dirname, 
     staticFolder: path.join(__dirname, 'public'), 
     faviconPath : __dirname + '/public/LOGO139x139.png', 
@@ -27,20 +28,27 @@ require('@src/weirdworld').weirdWorld({
 .then( app => {   
     return require('@src/appClock').appClock( app )
 })
-.then( app => {
-    return require('@users/users').users( app )
+.then( weirdworld => {
+    return require('@users/users').users({
+        expressStack, 
+        app: weirdworld
+    })
 }) 
-.then( app => app.run(app))
-
-
-require('@server/routingSystem').routingSystem({
-    app : expressApp
+.then( weirdworld => {
+    return require('@server/routingSystem').routingSystem({
+        expressStack    : weirdworld.expressStack, 
+        app             : weirdworld.app 
+    })
+})
+.then( appPackage => {
+    return require('@server/httpServer').httpServer( appPackage )
+})
+.then( app => {
+    app.run(app)
 })
 
-require('@server/httpServer').httpServer({
-   app  : expressApp,
-   port: '3000'
-})
-    
+
+
+
 
 

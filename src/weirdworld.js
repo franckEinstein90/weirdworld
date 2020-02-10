@@ -61,8 +61,10 @@ const weirdWorld = function({
                     versioning          : false
                 },
  
-                say: msg => _appLogger.info(msg), 
-
+                say: msg => {
+                    console.log(msg)
+                    _appLogger.info(msg)
+                }, 
                 run: app => {
                     if( app.features.clock ){
                         app.clock.start()

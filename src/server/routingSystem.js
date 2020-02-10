@@ -31,28 +31,30 @@ const corsOptions = {
 
 
 const routingSystem = function({
+    expressStack, 
     app
 }) {
- /*   let oidc = new ExpressOIDC({
-        issuer: `${appData.oktaClientDomain}/oauth2/default`,
-        client_id: appData.oktaClientID,
-        client_secret: appData.oktaClientSecret,
-        appBaseUrl: appData.baseURL,
-        scope: 'openid profile',
-        post_logout_redirect_uri: appData.postLogoutRedirect 
-    })
-    app.use(session({
+  
+ /*   app.use(session({
         secret: appData.appSecret, 
         resave: true, 
         saveUninitialized: false
     }))
     app.use(oidc.router)*/
-    let router = express.Router()
+  //  let router = express.Router()
+   // expressStack.use('/', router)
+    expressStack.get('/', appRoot.render)
 
-    app.use('/', router)
-    router.get('/', appRoot.render)
-    /*
-    router.post('/login'   , user.login )
+    expressStack.get('/protected', app.authSystem.ensureAuthenticated(), (req, res)=>{
+        res.send('top secred')
+    })
+
+   
+   
+    expressStack.post('/login'   , ()=>{
+        debugger
+    })
+      /*  
     router.get('/userData' , oidc.ensureAuthenticated(), user.getData )
 
     router.post('/newTrip' , oidc.ensureAuthenticated(), user.postNewTrip)
@@ -60,13 +62,12 @@ const routingSystem = function({
 
     router.get('/countryInfo'   , appRoot.countryInfo )
     router.get('/appStatus'     , oidc.ensureAuthenticated(), appStatus.report )
-
-    app.use(function(req, res, next) {
+*/
+    expressStack.use(function(req, res, next) {
         next(createError(404));
     })
-
     // error handler
-    app.use(function(err, req, res, next) {
+    expressStack.use(function(err, req, res, next) {
         // set locals, only providing error in development
         res.locals.message = err.message;
         res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -74,7 +75,12 @@ const routingSystem = function({
         // render the error page
         res.status(err.status || 500);
         res.render('error');
-    })*/
+    }) 
+    
+    return {
+        expressStack, 
+        weirdworld: app
+    }
 }
 
 module.exports = {

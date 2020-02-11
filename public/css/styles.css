@@ -2,7 +2,7 @@
     --main: rgba(221, 220, 198, 0.986);
     --pop: #009494; 
     --snaple: #F70000;
-    --crash: #f77000;
+    --crash: #ffca60;
     --sky: #3358AF;
 }
 
@@ -23,24 +23,27 @@ body{
 .sidebar {
   margin: 0;
   padding: 0;
-  padding-top: 40px; 
-  width: 400px;
-  background-color: #009494; 
+  padding-top: 50px;
+  color: var(--crash);  
+  width: 200px;
+  background-color: var(--main); 
+  border-left: 10px inset var(--pop); 
   position: fixed;
   height: 100%;
   overflow: auto;
+  box-shadow: 4px 4px; 
 }
 
 .sidebar a {
   display: block;
-  color: black;
+  color: var(--crash);
   padding: 16px;
   text-decoration: none;
 }
  
 .sidebar a.active {
-  background-color: #4CAF50;
-  color: white;
+  background-color: var(--pop);
+  color: var(--pop);
 }
 
 .sidebar a:hover:not(.active) {
@@ -55,28 +58,33 @@ body{
 }
 
 .leftNavIcon{
-   color: var(--main);
+    color: var(--pop);
+    padding-right:3px; 
+    box-shadow: 0px 1px; 
 }
 
 .topNav{
-    background-color: #990000; 
-    color: var(--main);
-    z-index:4;
-    height:45px; 
-    display: none;
-    padding-left:20px;
+
+    border-left: 10px inset var(--pop); 
+    background-color    : var(--pop); 
+    color               : var(--pop);
+    z-index             :4;
+    height              :45px; 
+    display             : block;
+    padding-left        :20px;
+    box-shadow          : 4px 4px; 
 }
 
 .topNav a {
-  display: block;
-  padding-top:10px;
-  text-decoration: underline;
-  cursor: pointer; 
+    color: var(--crash);
+    font-size: 1.2em; 
+    display: block;
+    padding-top:10px;
+    cursor: pointer; 
 }
  
 .topNav sidebar a.active {
-  background-color: #4CAF50;
-  color: white;
+  background-color: var(--snaple);
 }
 
 .topNav sidebar a:hover:not(.active) {
@@ -86,7 +94,8 @@ body{
 
 
 div.content {
-  margin-left: 400px;
+  color: var(--pop); 
+  margin-left: 200px;
   padding: 1px 16px;
   height: 1000px;
 }
@@ -96,9 +105,17 @@ div.content {
   max-width:100%;
   padding-right:10px; 
   height:800px;
-  font-size:19px; 
+  font-size:19px;
+  margin-right:20px;  
 }
-
+#userPane H1{
+    width: 60%;
+    border: black 1px inset;  
+    background-color: var(--pop); 
+    color: var(--crash);
+    text-align: right;
+    padding-right: 10px;  
+}
 
 @media screen and (max-width: 1200px) {
   .sidebar {
@@ -130,13 +147,19 @@ div.content {
   justify-content: space-around;  
   align-items: stretch; 
 }
+
 #demo-canvas{
-    height:800px; 
+  background-color: var(--snaple);
+  opacity:0.8; 
+  height:800px; 
+  border: 1px var(--pop);
 }
+
 #discoverPane{
   flex:50%; 
   max-width:100%; 
 }
+
 .hidden{
   display: none; 
   opacity: 0; 
@@ -146,19 +169,46 @@ div.content {
   padding-top:10px;
 }
 
+/*styles for user list of trips*/
+.tripList h2 {
+    color: var(--pop);
+    text-align: center;  
+    background-color: var(--crash); 
+    border: black inset 1px; 
+    box-shadow: 4px 4px; 
+}
+.tripList ul{
+    color: var(--pop);
+    list-style-type: none; 
+}
+
+.tripList li{
+    font-size       : 1.4em; 
+    border          : black 1px inset;
+    margin-bottom   : 5px;
+    padding-left    : 5px;   
+}
+
+.tripList li:hover{
+    background-color: var(--crash); 
+    color           : var(--main); 
+    box-shadow      : 2px;
+}
+
 #findCountryButton{
   margin-top:10px;
-  background-color: var(--main);
-  color: var(--crash);
+  background-color: var(--crash);
+  color: var(--pop);
   font-size:2em;
   border: black 1px inset;
 }
 
 #findCountryInput{
-  font-size:2em;
-  margin-top:5px;
-  border-top: var(--sky) 1px inset; 
-  border-bottom: black 1px inset;
+    font-size       : 2em;
+    margin-top      : 5px;
+    border-top      : var(--sky) 1px inset; 
+    border-bottom   : black 1px inset;
+    width           : 70%; 
 }
 
 #formDiscover{
@@ -166,27 +216,42 @@ div.content {
 }
 
 .content H1{
-    color:#172568;
+    color:var(--pop);
     font-family:Bangers;
-    font-size: 3.3em;
+    font-size: 2.3em;
     letter-spacing:4px;
 }
-.countryCard {
-    cursor: pointer;
-    padding-right:20px; 
-    padding-bottom:10px; 
-    text-align:right;
-    color: var(--main);
-    width:100%;
+
+.discoveredCountries ul{
+    list-style-type: none; 
 }
 
+.discoveredCountries li{
+    font-size       : 1.5em; 
+    border          : 1px inset var(--crash); 
+    cursor          : pointer;
+    padding-left    : 20px; 
+    padding-right   :20px; 
+    text-align      :left;
+    color: var(--pop);
+    width:100%;
+    margin-top: 5px; 
+    margin-bottom: 5px; 
+    box-shadow: 4px 4px; 
+ 
+}
+.dicoveredCountries li i{
+    float: right; 
+}
 .countryCard:hover {
   background-color: var(--crash);
   color:var(--sky)
 }
+
 .discovered {
   background-color: var(--sky); 
 }
+
 .selected {
   background-color: var(--snaple); 
 }
@@ -201,15 +266,6 @@ div.content {
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
   }
-
-  .tenantSelection{
-    width:120px; 
-    text-align:right 
-  }
-
- .groupCmd {
-    cursor: pointer
- }
 
 .settingsItem {
   cursor: pointer

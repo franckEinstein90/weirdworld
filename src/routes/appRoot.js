@@ -39,7 +39,7 @@ const appRoot = (function() {
 
             }
 
-            request(options('uk'), function(error, response, body) {
+            request(options('li'), function(error, response, body) {
                 if (error) throw new Error(error);
                 pageData.myCountries = JSON.parse(body)
 

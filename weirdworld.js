@@ -22,9 +22,12 @@ require('@src/weirdworld').weirdWorld({
     root    : __dirname, 
     settings: 'settings.db'
 })
-.then( app => {
-    return require('@src/appEvents').appEvents( app )
+.then( weirdworld => {
+    return require('@src/appEvents').appEvents( weirdworld )
 })
+.then( weirdworld => {
+    return require('@src/weirdworldVersion').weirdWorldVersion( weirdworld )
+ })
 .then( app => {   
     return require('@src/appClock').appClock( app )
 })
@@ -44,7 +47,7 @@ require('@src/weirdworld').weirdWorld({
     return require('@server/httpServer').httpServer( appPackage )
 })
 .then( app => {
-    app.run(app)
+    app.run( app )
 })
 
 

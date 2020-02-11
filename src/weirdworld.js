@@ -15,6 +15,7 @@ const winston = require('winston')
 /*****************************************************************************/
 const appData       = require('@src/appData').appData
 const appDatabase   = require('@server/db').db
+const moment        = require('moment')
 /*****************************************************************************/
 
 const newLogger = function( fileName ){
@@ -37,16 +38,16 @@ const weirdWorld = function({
 
     let _consoleLogger  = newLogger()
     let _fileLogger     = newLogger(logs)
-    let _appLogger  = appData.env(_consoleLogger, _fileLogger)
-
-    _appLogger.info(`I'm starting init process`)
+    let _appLogger      = appData.env(_consoleLogger, _fileLogger)
+    let _startTime      = moment() 
+    _appLogger.info(`Starting init on ${_startTime}`)
 
     return new Promise((resolve, reject) => {
         appDatabase.configure({     //check if there's a settings database 
             filePath: settings
         })
         .then( dbStatus => {
-            _appLogger.info(`I have settings database access: ${dbStatus}`)
+            _appLogger.info(`access to settings database = ${dbStatus}`)
 
             resolve({       
                 data        : appData,
@@ -58,18 +59,23 @@ const weirdWorld = function({
                     clock               : false, 
                     authentication      : false, 
                     security            : false, 
-                    versioning          : false
+                    versioning          : false, 
+                    calendar            : false
                 },
  
                 say: msg => {
-                    console.log(msg)
                     _appLogger.info(msg)
                 }, 
+
                 run: app => {
+                    if( app.features.versioning ) {
+                        app.say(`weirdworld v:${app.version.major}.${app.version.minor}.${app.version.patch} booting`)
+                    } else {
+                        app.say(`weirdworld booting`)
+                    }
                     if( app.features.clock ){
                         app.clock.start()
                     }
-                    app.say(`weirdWorld back-end on`)
                 }
             }) 
         })

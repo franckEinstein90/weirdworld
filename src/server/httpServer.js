@@ -51,6 +51,7 @@ const onListening = function(addr) {
 }
 
 const httpServer = function( appPackage ) {
+
     let {expressStack , weirdworld} = appPackage
     let _port = normalizePort(process.env.PORT || weirdworld.data.port)
     expressStack.set('port', _port)

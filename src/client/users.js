@@ -10,12 +10,12 @@ const showModal = require('./ui/modal').showModal
  /****************************************************************************/
 
 const getUserInfo = function( callback ){
-        $.ajax({
-                method: "GET",
-                url: "/userData",
-                success: callback, 
-                error: (xhr, stats, error)=>{
-                }
+    $.ajax({
+        method: "GET",
+        url: "/userData",
+        success: callback, 
+        error: (xhr, stats, error)=>{
+        }
             })
 }
 
@@ -46,7 +46,6 @@ const user = (function(){
 
            $('#topNavNewTripTrigger').click( event => {
                 event.preventDefault()
-            
            })
 
            getUserInfo( _processUserData )

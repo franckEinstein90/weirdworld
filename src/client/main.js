@@ -49,6 +49,20 @@ let getCountryInfo = function(countryInput){
 
 $(function() {
 
+    let weirdWorldClient = {
+        ui          : null,
+        login       : null,
+  
+        features    : {
+            ui      : false, 
+            login   : false
+        }
+    }
+
+    require('./ui/ui').ui( weirdWorldClient ) 
+    require('./users').addLoginFeature( weirdWorldClient ) 
+
+
     user.ready()  
     discoverPane.ready()
 
@@ -75,6 +89,9 @@ $(function() {
         ["spain", {
             color: 'green'
         }],
+        ["morroco", {
+            color: 'red'
+        }], 
         ["usa", {
             color: 'green'
         }],
@@ -92,6 +109,7 @@ $(function() {
         ["germany", "italy"],
         ["france", "italy"],
         ["france", "germany"],
+        ["morroco", "togo"], 
         ["germany", "austria"]
     ]);
 
@@ -128,6 +146,5 @@ $(function() {
      })
 
 
-     getCountryInfo( 'fr' )
 
 })

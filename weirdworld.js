@@ -12,28 +12,48 @@ require('module-alias/register')
 const path = require('path')
 /*****************************************************************************/
 
-const expressStack = require('@server/expressStack').expressStack({
-    root        : __dirname, 
-    staticFolder: path.join(__dirname, 'public'), 
-    faviconPath : __dirname + '/public/LOGO139x139.png', 
-})
 
-require('@src/weirdworld').weirdWorld({
+const runApp = app => {
+    if( app.features.versioning ) {
+        app.say(`${app.name} is starting`)
+    } else {
+     app.say(`weirdworld booting`)
+     }
+     if( app.features.clock ){
+      app.clock.start()
+      }
+}
+ 
+
+const weirdWorld = {
+    name        : 'weirdWorld', 
+    data        :  require('@src/appData').appData, 
+    faviconPath : __dirname + '/public/LOGO139x139.png', 
+    features    : {
+            userManagement      : false, 
+            messages            : false, 
+            settingsDb          : false, 
+            clock               : false, 
+            authentication      : false, 
+            security            : false, 
+            versioning          : false, 
+            calendar            : false
+    },
     root    : __dirname, 
-    settings: 'settings.db'
+    staticFolder: path.join(__dirname, 'public')
+}
+
+require('@src/weirdworld').configApp( weirdWorld )
+.then( weirdWorld => {
+    require('@server/expressStack').configExpress( weirdWorld ) 
+    return require('@src/appEvents').appEvents( weirdWorld )
 })
-.then( weirdworld => {
-    return require('@src/appEvents').appEvents( weirdworld )
-})
-.then( weirdworld => {
-    return require('@src/weirdworldVersion').weirdWorldVersion( weirdworld )
- })
 .then( app => {   
     return require('@src/appClock').appClock( app )
 })
 .then( weirdworld => {
     return require('@users/users').users({
-        expressStack, 
+        expressStack: weirdworld.expressStack, 
         app: weirdworld
     })
 }) 
@@ -47,7 +67,7 @@ require('@src/weirdworld').weirdWorld({
     return require('@server/httpServer').httpServer( appPackage )
 })
 .then( app => {
-    app.run( app )
+    runApp( app )
 })
 
 

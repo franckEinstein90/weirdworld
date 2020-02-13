@@ -4,7 +4,7 @@
  *
  *
  * ***************************************************************************/
-                                "use strict"
+"use strict"
 
 /*****************************************************************************/
 const express = require('express')
@@ -13,33 +13,28 @@ const favicon = require('express-favicon')
 const path = require('path')
 /*****************************************************************************/
 
-const expressStack = function({
-    root,
-    staticFolder,
-    faviconPath
-
-}) {
-
-    let app = express()
+const configExpress = function( app ) {
+    
+    app.expressStack =  express()
     require('@viewSystem/viewSystem').viewSystem({
-        app,  
-        root,
-        layoutsDir:  path.join(root,'views','layouts/'),
-        partialsDir: path.join(root,'views','partials/')
+        app     : app.expressStack,  
+        root    : app.root,
+        layoutsDir:  path.join(app.root,'views','layouts/'),
+        partialsDir: path.join(app.root,'views','partials/')
     })
 
-    app.use(cookieParser());
-    app.use(express.json())
-    app.use(express.urlencoded({
+    app.expressStack.use(cookieParser());
+    app.expressStack.use(express.json())
+    app.expressStack.use(express.urlencoded({
         extended: false
     }))
 
-    app.use(express.static(staticFolder))
-    app.use(favicon(faviconPath))
+    app.expressStack.use(express.static(app.staticFolder))
+    app.expressStack.use(favicon(app.faviconPath))
 
     return app
 }
 
 module.exports = {
-    expressStack
+   configExpress 
 }

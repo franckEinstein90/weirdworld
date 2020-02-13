@@ -109,6 +109,20 @@ let getCountryInfo = function(countryInput){
 
 $(function() {
 
+    let weirdWorldClient = {
+        ui          : null,
+        login       : null,
+  
+        features    : {
+            ui      : false, 
+            login   : false
+        }
+    }
+
+    require('./ui/ui').ui( weirdWorldClient ) 
+    require('./users').addLoginFeature( weirdWorldClient ) 
+
+
     user.ready()  
     discoverPane.ready()
 
@@ -135,6 +149,9 @@ $(function() {
         ["spain", {
             color: 'green'
         }],
+        ["morroco", {
+            color: 'red'
+        }], 
         ["usa", {
             color: 'green'
         }],
@@ -152,6 +169,7 @@ $(function() {
         ["germany", "italy"],
         ["france", "italy"],
         ["france", "germany"],
+        ["morroco", "togo"], 
         ["germany", "austria"]
     ]);
 
@@ -188,11 +206,10 @@ $(function() {
      })
 
 
-     getCountryInfo( 'fr' )
 
 })
 
-},{"./country":1,"./ui/discoverPane.js":3,"./users":5}],3:[function(require,module,exports){
+},{"./country":1,"./ui/discoverPane.js":3,"./ui/ui":5,"./users":6}],3:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -256,46 +273,98 @@ module.exports = {
 
 
 },{}],4:[function(require,module,exports){
+/******************************************************************************
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ *
+ * ***************************************************************************/
 "use strict"
 
-const modalBoilerPlate = [
-   `<div class="w3-modal" style="display='block'>`, 
-      `<div class="w3-modal-content">`, 
-         `<div class="w3-container">`, 
-         `<span onclick="document.getElementById('id01').style.display='none'"`, 
-            `class="w3-button w3-display-topright">&times;`, 
-         '</span>', 
-         '</div>', 
-      '</div>', 
-   '</div>'].join('')
+ /****************************************************************************/
 
 
-const modal = (function(){
-
-   let _modalLogin = {
-      title: "user login"
-   }
-
-   let _modalWindows = new Map()
-   _modalWindows.set("login", _modalLogin)
-
-   return{
-      showModal: function( modalId ){
-         let modalContent = _modalWindows.get(modalId) 
-         $('#modalTitle').text(modalContent.title)
+const showModal  = ({
+    title, 
+    content
+}) => {
+         $('#modalTitle').text(title)
+         $('#modalContent').html(content)
          document.getElementById('modalWindow').style.display='block'
-      }
-   }
-})()
+}
+    
+const addModalFeature = function( ui ){
 
-const showModal = function(modalId){
-//   let modalContent = 
+    ui.features.modal = true
+    let _modalLogin = {
+      title: "member login"
+    }
+
+    let _modalWindows = new Map()
+    _modalWindows.set("login", _modalLogin)
+
+    ui.showModal = showModal
+    return ui
+   /* : function( modalId ){
+         let modalContent = _modalWindows.get(modalId) 
+      }*/
+}
+
+
+module.exports = {
+    addModalFeature
+}
+
+},{}],5:[function(require,module,exports){
+/******************************************************************************
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ *
+ * ***************************************************************************/
+"use strict"
+
+ /****************************************************************************/
+const addModalFeature = require('./modal').addModalFeature
+ /****************************************************************************/
+const sections = [
+    window, 
+    '#viewPort', 
+    '#visualCanvas'
+]
+
+const ui = function( app ){
+    app.ui = { 
+        modal   : null
+    }
+    app.ui.features = {
+        modal   : false
+    }
+    addModalFeature(app.ui)
+
+    let _sections = sections.map( section => {
+            return {
+                handle  : section, 
+                height  : null, 
+                width   : null
+            } 
+    })
+    
+    let _readySize = () => _sections.forEach( section => {
+            section.height = $( section.handle ).height()
+            section.width  = $( section.handle ).width()
+    })
+
+    let _logSize = section => `${section.handle}: w-${section.width} h-${section.height}`
+   
+    app.features.ui = true
 }
 
 module.exports = {
-   showModal: modal.showModal
+    ui
 }
-},{}],5:[function(require,module,exports){
+
+},{"./modal":4}],6:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -308,12 +377,12 @@ const showModal = require('./ui/modal').showModal
  /****************************************************************************/
 
 const getUserInfo = function( callback ){
-        $.ajax({
-                method: "GET",
-                url: "/userData",
-                success: callback, 
-                error: (xhr, stats, error)=>{
-                }
+    $.ajax({
+        method: "GET",
+        url: "/userData",
+        success: callback, 
+        error: (xhr, stats, error)=>{
+        }
             })
 }
 
@@ -331,12 +400,7 @@ const user = (function(){
 
     return{
        ready: function( ){
-            $('#btnLoginOrRegister').click( event => {
-                event.preventDefault()
-                showModal('login')
-            })
-
-            $('#userTripList').DataTable({
+                $('#userTripList').DataTable({
                 paging: false, 
                 searching: false,
                 select: true
@@ -344,7 +408,6 @@ const user = (function(){
 
            $('#topNavNewTripTrigger').click( event => {
                 event.preventDefault()
-            
            })
 
            getUserInfo( _processUserData )
@@ -354,7 +417,54 @@ const user = (function(){
 
 
 
+const inputField = ({
+    icon, 
+    placeholder
+}) => [ `<div class="w3-row w3-section">`, 
+            `<div class="w3-col" style="width:50px"><i class="w3-xxlarge ${icon}"></i></div>`, 
+            `<div class="w3-rest">`, 
+            `<input class="w3-input w3-border" name="first" type="text" placeholder="${placeholder}">`, 
+            `</div>`, 
+        `</div>` ].join('')
+
+
+const userNameInput = inputField({
+    icon: 'fa fa-user', 
+    placeholder: 'Member Name or Email'
+})
+
+const emailInput = inputField({
+    icon:           'fa fa-envelope-o', 
+    placeholder:    'Password'
+})
+ 
+const loginForm = [
+    `<form>`, 
+    `${userNameInput}`, 
+    `${emailInput}`,
+    `<button class="w3-button w3-block w3-section w3-ripple w3-padding">Come in</button>`, 
+    `</form>`
+    ].join('')
+
+const addLoginFeature = function( app ){
+
+    if(app.ui.features.modal){
+            app.showLogin = x => app.ui.showModal({
+                title   : 'Login', 
+                content : loginForm 
+            })
+
+            $('#btnLogin').click( event => {
+                event.preventDefault()
+                app.showLogin( )
+            })
+
+            app.features.login = true
+    }
+}
+
 module.exports = {
+    addLoginFeature, 
     user
 }
 

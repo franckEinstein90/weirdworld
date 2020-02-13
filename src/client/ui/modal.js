@@ -1,39 +1,41 @@
+/******************************************************************************
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ *
+ * ***************************************************************************/
 "use strict"
 
-const modalBoilerPlate = [
-   `<div class="w3-modal" style="display='block'>`, 
-      `<div class="w3-modal-content">`, 
-         `<div class="w3-container">`, 
-         `<span onclick="document.getElementById('id01').style.display='none'"`, 
-            `class="w3-button w3-display-topright">&times;`, 
-         '</span>', 
-         '</div>', 
-      '</div>', 
-   '</div>'].join('')
+ /****************************************************************************/
 
 
-const modal = (function(){
-
-   let _modalLogin = {
-      title: "member login"
-   }
-
-   let _modalWindows = new Map()
-   _modalWindows.set("login", _modalLogin)
-
-   return{
-      showModal: function( modalId ){
-         let modalContent = _modalWindows.get(modalId) 
-         $('#modalTitle').text(modalContent.title)
+const showModal  = ({
+    title, 
+    content
+}) => {
+         $('#modalTitle').text(title)
+         $('#modalContent').html(content)
          document.getElementById('modalWindow').style.display='block'
-      }
-   }
-})()
+}
+    
+const addModalFeature = function( ui ){
 
-const showModal = function(modalId){
-//   let modalContent = 
+    ui.features.modal = true
+    let _modalLogin = {
+      title: "member login"
+    }
+
+    let _modalWindows = new Map()
+    _modalWindows.set("login", _modalLogin)
+
+    ui.showModal = showModal
+    return ui
+   /* : function( modalId ){
+         let modalContent = _modalWindows.get(modalId) 
+      }*/
 }
 
+
 module.exports = {
-   showModal: modal.showModal
+    addModalFeature
 }

@@ -4,7 +4,6 @@
  *
 *
  * ***************************************************************************/
-
 "use strict"
 
 /*****************************************************************************/
@@ -15,8 +14,12 @@ const weirdWorldVersion = function( weirdworld ){
     return new Promise((resolve, reject)=> {
 
         apv.getAppVersion( (err, data) => {
-            weirdworld.features.versioning = true
             weirdworld.version = data.version
+            weirdworld.features.versioning = true
+            weirdworld.versionTag = [
+                    `v ${weirdworld.version.major}`, 
+                    `.${weirdworld.version.minor}`, 
+                    `.${weirdworld.version.patch}`].join('')
             return resolve (weirdworld)
         })
 

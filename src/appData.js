@@ -9,15 +9,18 @@
 /*****************************************************************************/
 const config    = require('config')
 /*****************************************************************************/
+
+let configGet = tag => config.has(tag) ? config.get(tag) : null
+
 const appData = (function(){
 
-    let _env                = config.get('env')
-    let _oktaClientID       = config.get('oktaClientID')
-    let _oktaClientSecret   = config.get('oktaClientSecret')
-    let _oktaClientDomain   = config.get('oktaClientDomain')
-    let _rapidApiKey        = config.get('rapidAPIKey')
-    let _settingsDBPath     = config.get('settingsDBPath')
-    let _appSecret          = config.get('appSecret')
+    let _env                = config.has('env') ? config.get('env') : 'dev'
+    let _oktaClientID       = configGet('oktaClientID')
+    let _oktaClientSecret   = configGet('oktaClientSecret')
+    let _oktaClientDomain   = configGet('oktaClientDomain')
+    let _rapidApiKey        = configGet('rapidAPIKey')
+    let _settingsDBPath     = configGet('settingsDBPath')
+    let _appSecret          = configGet('appSecret')
     let _port               = '3000'
     let _baseURL            = `http://localhost:${_port}`
     let _postLogoutURI      = `${_baseURL}/logout/callback`

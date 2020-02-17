@@ -121,7 +121,7 @@ $(function() {
 
     require('./ui/ui').ui( weirdWorldClient ) 
     require('./users').addLoginFeature( weirdWorldClient ) 
-
+    require('./ui/tripVisual').tripDisplay( weirdWorldClient )
 
     user.ready()  
     discoverPane.ready()
@@ -209,7 +209,7 @@ $(function() {
 
 })
 
-},{"./country":1,"./ui/discoverPane.js":3,"./ui/ui":5,"./users":6}],3:[function(require,module,exports){
+},{"./country":1,"./ui/discoverPane.js":3,"./ui/tripVisual":5,"./ui/ui":6,"./users":7}],3:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -316,6 +316,41 @@ module.exports = {
 }
 
 },{}],5:[function(require,module,exports){
+"use strict"
+
+const tripDisplay = function( clientApp ){
+    let nodes = new vis.DataSet([
+        {id: 1, label: 'Berlin'}, 
+        {id: 2, label: 'Prague'}, 
+        {id: 3, label: 'venice'},
+        {id: 4, label: 'Bologna'}
+    ])
+
+    let edges = new vis.DataSet([
+        {from: 1, to: 2}, 
+        {from: 2, to: 3, label:'Lufthansa (152$)'}, 
+        {from: 3, to: 4}
+    ])
+
+    let container = document.getElementById('visualCanvas')
+    let data = {
+        nodes, 
+        edges
+    }
+    let options = {
+        edges   : {
+            arrows  : {
+                to: true
+            }
+        }
+    }
+    let trip = new vis.Network(container, data, options)
+}
+
+module.exports = {
+    tripDisplay
+}
+},{}],6:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -364,7 +399,7 @@ module.exports = {
     ui
 }
 
-},{"./modal":4}],6:[function(require,module,exports){
+},{"./modal":4}],7:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000

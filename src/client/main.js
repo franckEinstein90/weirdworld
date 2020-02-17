@@ -61,7 +61,7 @@ $(function() {
 
     require('./ui/ui').ui( weirdWorldClient ) 
     require('./users').addLoginFeature( weirdWorldClient ) 
-
+    require('./ui/tripVisual').tripDisplay( weirdWorldClient )
 
     user.ready()  
     discoverPane.ready()

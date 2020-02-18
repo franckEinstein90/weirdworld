@@ -30,10 +30,7 @@ const corsOptions = {
 }
 
 
-const routingSystem = function({
-    expressStack, 
-    app
-}) {
+const routingSystem = function( app ){
   
  /*   app.use(session({
         secret: appData.appSecret, 
@@ -43,15 +40,15 @@ const routingSystem = function({
     app.use(oidc.router)*/
   //  let router = express.Router()
    // expressStack.use('/', router)
-    expressStack.get('/', appRoot.render)
+    app.expressStack.get('/', appRoot.render)
 
-    expressStack.get('/protected', app.authSystem.ensureAuthenticated(), (req, res)=>{
+    /*expressStack.get('/protected', app.authSystem.ensureAuthenticated(), (req, res)=>{
         res.send('top secred')
-    })
+    })*/
 
    
    
-    expressStack.post('/login'   , ()=>{
+    app.expressStack.post('/login'   , ()=>{
         debugger
     })
       /*  
@@ -63,11 +60,11 @@ const routingSystem = function({
     router.get('/countryInfo'   , appRoot.countryInfo )
     router.get('/appStatus'     , oidc.ensureAuthenticated(), appStatus.report )
 */
-    expressStack.use(function(req, res, next) {
+    app.expressStack.use(function(req, res, next) {
         next(createError(404));
     })
     // error handler
-    expressStack.use(function(err, req, res, next) {
+    app.expressStack.use(function(err, req, res, next) {
         // set locals, only providing error in development
         res.locals.message = err.message;
         res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -77,10 +74,7 @@ const routingSystem = function({
         res.render('error');
     }) 
     
-    return {
-        expressStack, 
-        weirdworld: app
-    }
+    return app
 }
 
 module.exports = {

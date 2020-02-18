@@ -27,7 +27,8 @@ const users = function({
             debugger
         }
     }
-       let authEngineCredentials = {
+
+    let authEngineCredentials = {
         issuer: `${app.data.oktaClientDomain}/oauth2/default`,
         client_id: app.data.oktaClientID,
         client_secret: app.data.oktaClientSecret,
@@ -35,6 +36,7 @@ const users = function({
         scope: 'openid profile',
         post_logout_redirect_uri: app.data.postLogoutURI
     }
+    
     app.authSystem = new ExpressOIDC(authEngineCredentials)
   
     expressStack.use(session({

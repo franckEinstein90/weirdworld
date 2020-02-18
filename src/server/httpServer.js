@@ -50,19 +50,18 @@ const onListening = function(addr) {
     debug('Listening on ' + bind);
 }
 
-const httpServer = function( appPackage ) {
+const httpServer = function( app ) {
 
-    let {expressStack , weirdworld} = appPackage
-    let _port = normalizePort(process.env.PORT || weirdworld.data.port)
-    expressStack.set('port', _port)
+    let _port = normalizePort(process.env.PORT || app.data.port)
+    app.expressStack.set('port', _port)
 
-    let _server = http.createServer(expressStack)
+    let _server = http.createServer(app.expressStack)
     _server.listen(_port)
     _server.on('error', x => onError(_port))
     _server.on('listening', x => onListening(_server.address()))
 
-    weirdworld.say(`App running on port ${_port}`)
-    return weirdworld 
+    app.say(`App running on port ${_port}`)
+    return app 
 }
 
 

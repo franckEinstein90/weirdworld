@@ -81,6 +81,9 @@ require('@src/weirdworld').configApp( weirdWorld )
 })
 
 .then( weirdworld => {
+    if(weirdWorld.data.oktaClientID === null){
+        return weirdworld
+    }
     return require('@users/users').users({
         expressStack: weirdworld.expressStack, 
         app: weirdworld
@@ -88,10 +91,7 @@ require('@src/weirdworld').configApp( weirdWorld )
 }) 
 
 .then( weirdworld => {
-    return require('@server/routingSystem').routingSystem({
-        expressStack    : weirdworld.expressStack, 
-        app             : weirdworld.app 
-    })
+    return require('@server/routingSystem').routingSystem( weirdworld )
 })
 
 .then( appPackage => {

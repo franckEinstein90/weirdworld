@@ -7,7 +7,7 @@
 "use strict"
 
 /*****************************************************************************/
-const clock = require('@src/clock/clock').clock
+const clock = require('@src/time/timeKeepers').clock
 /*****************************************************************************/
 
 const appClock = function( app ){

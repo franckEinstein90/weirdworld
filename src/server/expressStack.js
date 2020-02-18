@@ -16,6 +16,7 @@ const path = require('path')
 const configExpress = function( app ) {
     
     app.expressStack =  express()
+
     require('@viewSystem/viewSystem').viewSystem({
         app     : app.expressStack,  
         root    : app.root,

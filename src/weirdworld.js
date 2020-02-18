@@ -38,9 +38,11 @@ const configApp = function( app ){
         app.startTime      = moment() 
         app.say = msg => _appLogger.info( msg )
 
+        app.say(`${app.name} ${app.state('init')} on ${app.startTime}`)
+
         require('@src/weirdworldVersion').weirdWorldVersion( app )
         .then( app => {
-                app.say(`booting ${app.name} ${app.versionTag} on ${app.startTime}`)
+                app.say(`${app.nextState()} ${app.features.versioning? app.versionTag : 'no version info'}`)
                 return resolve(app)
         })
     })

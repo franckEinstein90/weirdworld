@@ -11,7 +11,17 @@ const uuidv4    = require('uuid/v4')
 const cronJob   = require('node-cron')
 const moment    = require('moment')
 /*****************************************************************************/
+class TimeKeeper  {
 
+    constructor({
+        now, 
+        cout
+    }){
+        this.id     = uuidv4()
+        this.now    = now
+        this.cout   = cout
+    }
+}
 
 const clock = (function(){
 
@@ -28,12 +38,12 @@ const clock = (function(){
     cronJob.schedule('* * * * *', _update)
 
     return {
-        Clock : function({
+
+        Clock : class extends TimeKeeper ({
             cout, 
             events
         }){
-            this.id     = uuidv4()
-            this.cout   = cout
+              
             this.isOn   = false 
             this.events = events || []
             _clockRegister.push(this)
@@ -54,9 +64,6 @@ clock.Clock.prototype.addEvent = function( event ){
 
 
 }
-module.exports = {
-    clock
-}
 
 class Clock {
 
@@ -76,4 +83,9 @@ class Clock {
         this.cout('clock starting')
     }
 }
+
+module.exports = {
+    clock
+}
+
 

@@ -11,6 +11,7 @@
   "_moduleAliases": {
     "@src": "src",
     "@routes": "src/routes",
+    "@events": "src/events", 
     "@utils": "src/utils",
     "@services": "src/services",
     "@server": "src/server",

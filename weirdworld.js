@@ -12,7 +12,7 @@ require('module-alias/register')
 const path = require('path')
 /*****************************************************************************/
 const runApp = app => {
-    if( app.features.clock ) app.clock.start()
+  //  if( app.features.clock ) app.clock.start()
     app.say (`${app.nextState()} ${app.name}` ) 
 }
  
@@ -29,13 +29,23 @@ const appStages = (function(){
 })()
 
 
-const weirdWorld = {  //the whole app is in this object
+
+
+const weirdWorld = {  
 
     name        :                          'weirdWorld', 
-
     data        :       require('@src/appData').appData, 
+    root        :                             __dirname, 
+    staticFolder:        path.join(__dirname, 'public'),
+    faviconPath : __dirname + '/public/LOGO139x139.png', 
+    state       :                      appStages.status, 
+    nextState   :                        appStages.next, 
 
-    features    : {
+}
+
+
+require('@src/clientServerCommon/features').addFeatureSystem( weirdWorld ) 
+weirdWorld.features.include({
 
             authentication      :                 false, 
             clock               :                 false, 
@@ -46,22 +56,10 @@ const weirdWorld = {  //the whole app is in this object
             settingsDb          :                 false, 
             security            :                 false,                   
             versioning          :                 false, 
-    },
 
-    root        :                             __dirname, 
-    staticFolder:        path.join(__dirname, 'public'),
-    faviconPath : __dirname + '/public/LOGO139x139.png', 
+})
 
-    state       :                      appStages.status, 
-    nextState   :                        appStages.next, 
-
-}
-
-//i love this so much
 require('@src/weirdworld').configApp( weirdWorld )
-
-.then( require('@events/events').addEventFeature( weirdWorld ) )
-
 .then( weirdWorld => {
 /*    weirdWorld.addEvent({
         name: testEvent,
@@ -81,13 +79,12 @@ require('@src/weirdworld').configApp( weirdWorld )
 })
 
 .then( weirdworld => {
-    if(weirdWorld.data.oktaClientID === null){
+//    if(weirdWorld.data.oktaClientID === null){
         return weirdworld
-    }
-    return require('@users/users').users({
+  /*  return require('@users/users').users({
         expressStack: weirdworld.expressStack, 
         app: weirdworld
-    })
+    })*/
 }) 
 
 .then( weirdworld => {

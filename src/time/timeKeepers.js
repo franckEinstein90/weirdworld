@@ -23,6 +23,20 @@ class TimeKeeper  {
     }
 }
 
+class Clock extends TimeKeeper {
+            constructor({
+            cout, 
+            events
+            }) {              
+                super({
+                    now : moment(), 
+                    cout: cout
+                })
+                this.isOn   = false 
+                this.events = events || []
+            }
+}
+ 
 const clock = (function(){
 
     let _clockRegister = [] 
@@ -39,50 +53,12 @@ const clock = (function(){
 
     return {
 
-        Clock : class extends TimeKeeper ({
-            cout, 
-            events
-        }){
-              
-            this.isOn   = false 
-            this.events = events || []
-            _clockRegister.push(this)
-        }
+        Clock:  Clock
+
     }
 })()
 
-clock.Clock.prototype.start = function(){
-        this.cout(`Clock ${this.id} starting with ${this.events.length} events`)
-        this.isOn = true
-}
 
-clock.Clock.prototype.update = function( appTime ){
-    this.cout( appTime + " min(s)")
-}
-
-clock.Clock.prototype.addEvent = function( event ){
-
-
-}
-
-class Clock {
-
-    constructor({
-         cout, 
-         events
-     }){
-        this.events = events || []
-        this.cout  = cout
-        this.update = function(){
-            cout('hello')
-        }
-        cout(`clock init with ${this.events.length} events`)
-    }
-
-    start(){
-        this.cout('clock starting')
-    }
-}
 
 module.exports = {
     clock

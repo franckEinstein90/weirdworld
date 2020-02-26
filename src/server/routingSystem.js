@@ -56,9 +56,17 @@ const routingSystem = function( app ){
 
     router.post('/newTrip' , oidc.ensureAuthenticated(), user.postNewTrip)
     router.get('/trips'    , oidc.ensureAuthenticated(), user.getTrip )
-
-    router.get('/countryInfo'   , appRoot.countryInfo )
-    router.get('/appStatus'     , oidc.ensureAuthenticated(), appStatus.report )
+, 
+*/
+    let countryInfo = function(req, res, next) {
+            let countryName = req.query.country
+            app.getCountryInfo(countryName)
+            .then( results => {
+                res.send(results)
+                })
+      }
+    app.expressStack.get('/countryInfo'   , countryInfo )
+/*    router.get('/appStatus'     , oidc.ensureAuthenticated(), appStatus.report )
 */
     app.expressStack.use(function(req, res, next) {
         next(createError(404));

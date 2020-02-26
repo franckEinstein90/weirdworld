@@ -6,10 +6,14 @@ const featureSystem = (function(){
 
     return {
         
-        add : function({ featureName, on }){
-                   
-        }
+        add: function (featureName, on = false) {
+            _features.set(featureName, on)           
+            featureSystem.list.push(featureName)
+        }, 
 
+        has: featureName => _features.has(featureName), 
+
+        list : [] //list the features of the app
 
     }
 
@@ -17,7 +21,6 @@ const featureSystem = (function(){
 
 const addFeatureSystem = function( app ){
     app.features = featureSystem
-    app.features.include = features => Object.keys(features).forEach(key => featureSystem.add(key))
 }
 
 module.exports = {

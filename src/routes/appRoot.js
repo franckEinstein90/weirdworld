@@ -14,17 +14,6 @@ const request = require("request")
 const weirdWorld = require('@src/weirdworld').weirdWorld
 /*****************************************************************************/
 
-let options = country => {
-    return {
-        method: 'GET',
-        url: `https://restcountries-v1.p.rapidapi.com/name/${country}`,
-        headers: {
-            'x-rapidapi-host': 'restcountries-v1.p.rapidapi.com',
-            'x-rapidapi-key': appData.rapidApiKey
-        }
-    }
-}
-
 
 const appRoot = (function() {
 
@@ -39,15 +28,10 @@ const appRoot = (function() {
 
             }
 
-            request(options('li'), function(error, response, body) {
-                if (error) throw new Error(error);
-                pageData.myCountries = JSON.parse(body)
-
-                if (appStatus.running()) {
+            if (appStatus.running()) {
                     pageData.state = 'running'
-                }
-                res.render('user', pageData)
-            })
+            }
+            res.render('user', pageData)
         }, 
 
         getUserData: function(req, res, next) {
@@ -55,15 +39,8 @@ const appRoot = (function() {
                     countryCodes: ['MLI', 'BHR', 'PRI', 'WSM']
             }
             res.send( userData )
-        },
- 
-        countryInfo: function(req, res, next) {
-            let countryName = req.query.country
-            request(options(countryName), function(error, response, body) {
-                if (error) throw new Error(error);
-                res.send(JSON.parse(body))
-            })
         }
+     
     }
 
 })()

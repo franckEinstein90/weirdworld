@@ -19,10 +19,6 @@ const ui = function( app ){
     app.ui = { 
         modal   : null
     }
-    app.ui.features = {
-        modal   : false
-    }
-    addModalFeature(app.ui)
 
     let _sections = sections.map( section => {
             return {
@@ -39,7 +35,8 @@ const ui = function( app ){
 
     let _logSize = section => `${section.handle}: w-${section.width} h-${section.height}`
    
-    app.features.ui = true
+    app.features.add('ui')
+    addModalFeature(app)
 }
 
 module.exports = {

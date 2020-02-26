@@ -1,5 +1,8 @@
 "use strict"
 
+
+
+
 const tripDisplay = function( clientApp ){
     let nodes = new vis.DataSet([
         {id: 1, label: 'Berlin'}, 
@@ -15,10 +18,12 @@ const tripDisplay = function( clientApp ){
     ])
 
     let container = document.getElementById('visualCanvas')
+
     let data = {
         nodes, 
         edges
     }
+
     let options = {
         edges   : {
             arrows  : {
@@ -26,6 +31,7 @@ const tripDisplay = function( clientApp ){
             }
         }
     }
+
     let trip = new vis.Network(container, data, options)
 }
 

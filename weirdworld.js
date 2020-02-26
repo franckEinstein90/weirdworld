@@ -45,20 +45,6 @@ const weirdWorld = {
 
 
 require('@src/clientServerCommon/features').addFeatureSystem( weirdWorld ) 
-weirdWorld.features.include({
-
-            authentication      :                 false, 
-            clock               :                 false, 
-            calendar            :                 false, 
-            events              :                 false, 
-            userManagement      :                 false, 
-            messages            :                 false, 
-            settingsDb          :                 false, 
-            security            :                 false,                   
-            versioning          :                 false, 
-
-})
-
 require('@src/weirdworld').configApp( weirdWorld )
 .then( weirdWorld => {
 /*    weirdWorld.addEvent({
@@ -74,8 +60,12 @@ require('@src/weirdworld').configApp( weirdWorld )
     return require('@src/appEvents').appEvents( weirdWorld )
 })
 
-.then( app => {   
-    return require('@src/appClock').appClock( app )
+.then( weirdWorld => {
+    return require('@src/apiFetch').addRapidApiDataFetchFeature( weirdWorld )
+})
+
+.then( weirdWorld => {   
+    return require('@src/appClock').appClock( weirdWorld )
 })
 
 .then( weirdworld => {

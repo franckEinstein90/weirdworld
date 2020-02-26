@@ -7,6 +7,9 @@
  * ***************************************************************************/
 "use strict"
 
+
+
+
 class Country{
     constructor({
         alpha3Code,  //3 letter code for country
@@ -26,15 +29,18 @@ const countries = (function() {
     let _countries = new Map()
 
     return {
+
+        list: [],
+
         has: function({
             countryCode
         }) {
             return _countries.has(countryCode)
         },
 
-        add: function({
+        add: function(
             countryInfo
-        }) {
+        ) {
             let country = new Country({
                 alpha3Code: countryInfo.alpha3Code,
                 borders: countryInfo.borders, 
@@ -45,11 +51,13 @@ const countries = (function() {
                  
             })
             _countries.set(countryInfo.alpha3Code, countryInfo)
+            countries.list.push(countryInfo.name)
         },
 
         forEach:  callback => _countries.forEach( callback )            
     }
 })()
+
 
 
 module.exports = {

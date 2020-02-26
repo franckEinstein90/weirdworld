@@ -8,13 +8,10 @@
 
  /****************************************************************************/
  /****************************************************************************/
-let newCountryCard = function({
-    countryCode, 
-    country
-}) {
+let newCountryCard = function( country ) {
 
     return [
-        `<div class='w3-card countryCard discovered' style='margin-top:20px'>`,
+        `<DIV class='countryCard discovered' style='margin-top:20px'>`,
         `<DIV style='display:flex'>`, 
              `<DIV style="text-align:left;width:200px; color:blue; background-color:yellow; margin-left:5px">`, 
                 `<h3>${country.region}</h3>`, 
@@ -31,28 +28,31 @@ let newCountryCard = function({
 }
 
 
-const discoverPane = (function(){
+const discoverPaneModule = (function(){
 
     let $discoverPane = null
 
     return {
-        ready: function(){
-            $discoverPane = $('#discover')
+        ready: function( containerID ){
+            $discoverPane = $(`#${containerID}`)
         }, 
         empty: function(){
             $discoverPane.empty()
         },
-        addCard: function({
-            country, 
-            countryCode
-            }){
-            $discoverPane.append(newCountryCard({
-                country,
-                countryCode
-          }))
+        appendCard: function(country){
+            $discoverPane.append(newCountryCard(country))
         }
     }
 })()
+
+const discoverPane = function({
+    clientApp, 
+    containerID
+}){
+    discoverPaneModule.ready( containerID )
+    clientApp.countries.forEach(country => discoverPaneModule.appendCard(country))
+    clientApp.ui.discoverPane = discoverPaneModule
+}
 
 module.exports = {
     discoverPane

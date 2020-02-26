@@ -18,9 +18,9 @@ const showModal  = ({
          document.getElementById('modalWindow').style.display='block'
 }
     
-const addModalFeature = function( ui ){
+const addModalFeature = function( app ){
 
-    ui.features.modal = true
+    app.features.add('modal window')
     let _modalLogin = {
       title: "member login"
     }
@@ -28,11 +28,8 @@ const addModalFeature = function( ui ){
     let _modalWindows = new Map()
     _modalWindows.set("login", _modalLogin)
 
-    ui.showModal = showModal
-    return ui
-   /* : function( modalId ){
-         let modalContent = _modalWindows.get(modalId) 
-      }*/
+    app.ui.showModal = showModal
+    return app 
 }
 
 

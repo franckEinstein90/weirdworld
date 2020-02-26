@@ -81,19 +81,18 @@ const loginForm = [
 
 const addLoginFeature = function( app ){
 
-    if(app.ui.features.modal){
-            app.showLogin = x => app.ui.showModal({
-                title   : 'Login', 
-                content : loginForm 
-            })
+    app.showLogin = x => app.ui.showModal({
+        title   : 'Login', 
+        content : loginForm 
+    })
 
-            $('#btnLogin').click( event => {
-                event.preventDefault()
-                app.showLogin( )
-            })
+    $('#btnLogin').click( event => {
+        event.preventDefault()
+        app.showLogin( )
+    })
 
-            app.features.login = true
-    }
+    app.features.add('login')
+    return app
 }
 
 module.exports = {

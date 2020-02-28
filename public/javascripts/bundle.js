@@ -84960,10 +84960,176 @@ module.exports = {
 }
 
 },{}],895:[function(require,module,exports){
+/******************************************************************************
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ * - Trip class
+ *
+ * ***************************************************************************/
 "use strict"
+ /****************************************************************************/
+
+
+const places = (function(){
+    
+    let _locationFinder  = null
+    let _locationCreator = null
+    let _locations = new Map()
+
+    let _findLocation =  placeDescription => {
+        return new Promise((resolve, reject) => {
+            _locationFinder(placeDescription)
+
+            .then( location =>{
+                _locations.set (location.id, location)
+                return resolve(location.id)
+            })
+
+            .catch( err => {
+                let location = _locationCreator( placeDescription )
+                _locations.set (location.id, location)
+                return resolve(location.id)
+            })
+        })
+    }
+
+    return {
+
+        configure : function({
+            locationFinder, 
+            locationCreator
+        }){
+            _locationFinder  = locationFinder
+            _locationCreator = locationCreator
+        }, 
+
+        name: function( placeDescription ){
+            return _findLocation( placeDescription )
+        }
+
+    }
+})()
+
+
+module.exports = {
+    places
+}
+
+},{}],896:[function(require,module,exports){
+/******************************************************************************
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ * - Trip class
+ *
+ * ***************************************************************************/
+"use strict"
+ /****************************************************************************/
+
+let Budget = function( ) {
+    
+    this.currency, 
+    this.onHand, 
+    this.estimatedCost
+
+}
+
+
+const Trip = function( name ){
+
+    this.name = name
+    this.budget = new Budget()
+
+}
+
+
+
+
+const trips = (function(){
+
+   let _trips = new Map()
+
+   return {
+
+      newTrip : function(){
+
+      }, 
+
+      editTrip : function(){
+
+      }, 
+
+      deleteTrip  : function(){
+
+      }, 
+
+      forEach : function( callback ){
+         _trips.forEach(callback)
+      }
+
+   }
+
+})()
+
+module.exports = {
+    Trip, 
+    trips
+}
+
+},{}],897:[function(require,module,exports){
+"use strict"
+
+
+/******************************************************************************************** */
+const places = require('../clientServerCommon/places').places
+const Trip = require('../clientServerCommon/trips').Trip
 /******************************************************************************************** */
 const pickRandom = require('mathjs').pickRandom
 /******************************************************************************************** */
+let demoTrip1   = new Trip( "Europe September 2020" )
+demoTrip1.start = places.name('Ottawa, Canada') 
+
+
+/*
+
+    start  : 
+
+    back   : places.name('Ottawa, Canada'),  
+
+    budget  : {
+
+        currency        : 'CAD', 
+        onHand          : 2700, 
+        estimatedCost   : 4500
+    }
+
+})
+demoTrip1.travelSchedule = [
+
+    { 
+        to  : places.name('Berlin')
+    }, 
+
+    {
+        from : places.name('Berlin'), 
+        to   : places.name('Prague')
+    }, 
+
+    {
+        from : places.name('Prague'), 
+        to  : places.name('Venice')
+    }, 
+
+    {
+        from : places.name('Venice'), 
+        to   : places.name('Bologna')
+    }, 
+
+]
+
+*/
+
 
 const countryQuerySamples = ['ar', 'ir', 'ab', 'pc', 'ca', 'ma']
 
@@ -85005,7 +85171,8 @@ const addDemoData = function( {
 module.exports = {
    addDemoData
 }
-},{"mathjs":888}],896:[function(require,module,exports){
+
+},{"../clientServerCommon/places":895,"../clientServerCommon/trips":896,"mathjs":888}],898:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -85023,11 +85190,11 @@ $(function() {
     let weirdWorldClient = { 
         countries   : require('../clientServerCommon/countries').countries, 
         cities      : require('../clientServerCommon/cities').cities, 
-        trips       : [], 
-   //   cuisines  : 
-//        friends     : 
-//      regions     :  require('../clientServerCommon/cities').cities,
- //     subregion   : 
+        trips       : require('../clientServerCommon/trips').trips,
+        cuisines    : null, 
+        friends     : null, 
+        regions     : require('../clientServerCommon/cities').regions, 
+        subregion   : null
  //shows: 
   //    languages   : 
    //   currencies  : 
@@ -85048,42 +85215,40 @@ $(function() {
             //user is not logged in, add login feature
             require('./users').addLoginFeature( weirdWorldClient )
             return require('./demo.js').addDemoData({ 
-                clientApp: weirdWorldClient, 
-                numCountries: 10, 
-                numCities: 20 
+                clientApp       : weirdWorldClient, 
+                numCountries    : 10, 
+                numCities       : 20, 
+                numTrips        : 3
             })
         }
     })
+
     .then( weirdWorldClient => {
         return require('./ui/discoverPane').discoverPane({
             clientApp: weirdWorldClient, 
             containerID: 'discover'
         })
     })
-    .then( weirdWorldClient => {
-        return require('./ui/tripTabular').tripTabular({
-            clientApp : weirdWorldClient, 
-            containerID: 'userTripList'
-        })
-    })
-    .then( weirdWorldClient => {
-        require('./ui/tripVisual').tripDisplay( weirdWorldClient )
-    })
-  
 
+    require('./ui/tripTabular').tripTabular({
+        clientApp : weirdWorldClient, 
+        containerID: 'userTripList'
+    })
+
+    require('./ui/tripVisual').tripDisplay( weirdWorldClient )
    
-    $('#findCountryButton').click(event => {
-        event.preventDefault()
-        let countryInput = $('#findCountryInput').val()
-        getCountryInfo( countryInput )
-     })
-
-
-
 })
 
-},{"../clientServerCommon/cities":892,"../clientServerCommon/countries":893,"../clientServerCommon/features":894,"./demo.js":895,"./serverComs.js":897,"./ui/discoverPane":898,"./ui/tripTabular":900,"./ui/tripVisual":901,"./ui/ui":902,"./users":903}],897:[function(require,module,exports){
+},{"../clientServerCommon/cities":892,"../clientServerCommon/countries":893,"../clientServerCommon/features":894,"../clientServerCommon/trips":896,"./demo.js":897,"./serverComs.js":899,"./ui/discoverPane":900,"./ui/tripTabular":902,"./ui/tripVisual":903,"./ui/ui":904,"./users":905}],899:[function(require,module,exports){
+/******************************************************************************
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ * client/server communications 
+ *
+ * ***************************************************************************/
 "use strict"
+ /****************************************************************************/
 
 
 const getServerData = function( route, query ){
@@ -85098,15 +85263,28 @@ const getServerData = function( route, query ){
     })
 } 
 
+
+let testServerDataFetch = function(dataFetchFunction){
+
+    return new Promise((resolve, reject) => {
+        dataFetchFunction('countryInfo', { country : 'ir' })
+        .then( testResult => resolve( true ))
+        .catch( err => resolve(false) )
+    })
+
+}
+
 const addDataFetchFeature = function( app ){ //adds ajax data fetch
+
     app.getServerData = (route, query) => getServerData( route, query )
-    return app.getServerData('countryInfo', {country : 'ir'})
-    .then( testResult => { //it worked, add feature
+    return testServerDataFetch( app.getServerData )
+    .then( testResult => {
+        if( testResult ){
             app.features.add("fetch data from server")
-            return app
-        })
-    .catch( result => {    //it didn't work, don't add
-        return app         //feature
+            app.locationFinder  = null
+            app.locationCreator = null
+        }
+        return app
     })
 }
 
@@ -85114,7 +85292,7 @@ module.exports = {
     addDataFetchFeature
 } 
 
-},{}],898:[function(require,module,exports){
+},{}],900:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -85123,24 +85301,24 @@ module.exports = {
  * ***************************************************************************/
 "use strict"
 
- /****************************************************************************/
- /****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+
 let newCountryCard = function( country ) {
 
     return [
-        `<DIV class='countryCard discovered' style='margin-top:20px'>`,
+        `<DIV class='countryCard discovered ${country.region}'>`, 
         `<DIV style='display:flex'>`, 
-             `<DIV style="text-align:left;width:200px; color:blue; background-color:yellow; margin-left:5px">`, 
-                `<h3>${country.region}</h3>`, 
+             `<DIV style="text-align:left;width:200px;">`, 
                 country.subregion, 
              `</DIV>`, 
 
              `<DIV style="padding-left:20px; text-align:left">`, 
-                    `<h2>${country.name}</h2>`,
+                    `<h2 style="padding-right:10px">${country.name}</h2>`,
              `</DIV>`, 
         `</DIV>`,
-        `<DIV>Borders: ${country.borders.map(b => "<b>" + b + "</b>")}</DIV>`,
-        '</div>'
+        '</DIV>'
     ].join('')
 }
 
@@ -85168,6 +85346,7 @@ const discoverPane = function({
 }){
     discoverPaneModule.ready( containerID )
     clientApp.countries.forEach(country => discoverPaneModule.appendCard(country))
+    Sortable.create(document.getElementById(containerID))
     clientApp.ui.discoverPane = discoverPaneModule
 }
 
@@ -85177,7 +85356,7 @@ module.exports = {
 
 
 
-},{}],899:[function(require,module,exports){
+},{}],901:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -85217,28 +85396,74 @@ module.exports = {
     addModalFeature
 }
 
-},{}],900:[function(require,module,exports){
+},{}],902:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
  *
- * user settigns and info
+ * trip tabular representation 
  *
  * ***************************************************************************/
 "use strict"
  /****************************************************************************/
+const demoTrip = [
 
- const tripTable = (function(){
+            ["<td>1</td>", 
+            "<td>Venice</td>", 
+            "<td>June 21<sup>st</sup></td>", 
+            "<td>June 23<sup>rd</sup></td>", 
+            "<td>Marco Abradamo</td>"].join(''),
 
-   let $tripTable = null
+            ["<td>2</td>", 
+            "<td>Venice</td>", 
+            "<td>June 23<sup>rd</sup></td>", 
+            "<td>June 25<sup>th</sup></td>", 
+            "<td>TBD</td>"].join(''),
+
+            ["<td>3</td>", 
+            "<td>Berlin</td>", 
+            "<td>June 25<sup>th</sup></td>", 
+            "<td>June 27<sup>th</sup></td>", 
+            "<td>4 Seasons</td>"].join(''),
+
+            ["<td>4</td>", 
+            "<td>Prague</td>", 
+            "<td>June 28<sup>th</sup></td>", 
+            "<td>July 1<sup>st</sup></td>", 
+            "<td>Hostel...</td>"].join(''),
+
+            ["<td>5</td>", 
+            "<td>Bologna</td>", 
+            "<td>July 1<sup>st</sup></td>", 
+            "<td>July 3<sup>rd</sup></td>", 
+            "<td>Maria Eleanora</td>"].join('')
+]
+
+
+
+const tripTable = (function(){
+
+   let $tripTable       = null
+   let $tripTableBody   = null  
 
    return {
+
       configure: function( containerID ){
          $tripTable = $(`#${containerID}`)
+         $tripTableBody = $(`#${containerID} TBODY`)
+         demoTrip.forEach(location => $tripTableBody.append(`<TR>${location}</TR>`))
          $tripTable.DataTable({
-            paging: false, 
-            searching: false,
-            select: true
+            "columnDefs" : [
+                {
+                    "targets" : [0], 
+                    "visible" : false, 
+                }
+            ], 
+            "paging"    : false, 
+            "ordering"  : false, 
+            "info"      : false, 
+            "searching" : false,
+            "select"    : true
          })
       }, 
 
@@ -85258,12 +85483,14 @@ const tripTabular = function({
       clientApp.tripTable = tripTable
       clientApp.trips.forEach( trip => tripTable.addTrip(trip) )
       return clientApp
+
  }
 
  module.exports = {
     tripTabular
  }
-},{}],901:[function(require,module,exports){
+
+},{}],903:[function(require,module,exports){
 "use strict"
 
 
@@ -85291,6 +85518,10 @@ const tripDisplay = function( clientApp ){
     }
 
     let options = {
+        nodes   : {
+            shadow:true, 
+            font: '15px yellow'
+        }, 
         edges   : {
             arrows  : {
                 to: true
@@ -85305,7 +85536,7 @@ module.exports = {
     tripDisplay
 }
 
-},{}],902:[function(require,module,exports){
+},{}],904:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -85351,7 +85582,7 @@ module.exports = {
     ui
 }
 
-},{"./modal":899}],903:[function(require,module,exports){
+},{"./modal":901}],905:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -85454,4 +85685,4 @@ module.exports = {
     user
 }
 
-},{"./ui/modal":899}]},{},[896]);
+},{"./ui/modal":901}]},{},[898]);

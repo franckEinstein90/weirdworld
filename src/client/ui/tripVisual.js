@@ -25,6 +25,10 @@ const tripDisplay = function( clientApp ){
     }
 
     let options = {
+        nodes   : {
+            shadow:true, 
+            font: '15px yellow'
+        }, 
         edges   : {
             arrows  : {
                 to: true

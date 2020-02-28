@@ -1,29 +1,30 @@
 
 
-        {{>nav/topNav}}
-        {{>nav/leftNav}}
+{{>nav/topNav}}
+{{>nav/leftNav}}
 
-    <div class="content" id="viewPort">
-
-        <div class="flex-container"> 
+<div class="content" id="viewPort">
+    <div class="flex-container"> 
 
            {{>userPane}}
 
-
            <div id="rightPane">
-           {{>trips}}  
 
-               <div class="w3-container" id='topPanel'>
+                {{>trips}}  
+
+                <div class="w3-container" id='topPanel'>
                     {{>forms/discover}}
                 </div>
 
-               <div id="discover">
-               {{>countryCards}}
+                <div id="discover">
+                {{>countryCards}}
                </div>
-            </div>
+
+           </div>
+
     </div>
 </div>
 
-    {{>scripts/scripts}}
+{{>scripts/scripts}}
     
 

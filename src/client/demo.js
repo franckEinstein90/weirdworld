@@ -1,7 +1,55 @@
 "use strict"
+
+
+/******************************************************************************************** */
+const places = require('../clientServerCommon/places').places
+const Trip = require('../clientServerCommon/trips').Trip
 /******************************************************************************************** */
 const pickRandom = require('mathjs').pickRandom
 /******************************************************************************************** */
+let demoTrip1   = new Trip( "Europe September 2020" )
+demoTrip1.start = places.name('Ottawa, Canada') 
+
+
+/*
+
+    start  : 
+
+    back   : places.name('Ottawa, Canada'),  
+
+    budget  : {
+
+        currency        : 'CAD', 
+        onHand          : 2700, 
+        estimatedCost   : 4500
+    }
+
+})
+demoTrip1.travelSchedule = [
+
+    { 
+        to  : places.name('Berlin')
+    }, 
+
+    {
+        from : places.name('Berlin'), 
+        to   : places.name('Prague')
+    }, 
+
+    {
+        from : places.name('Prague'), 
+        to  : places.name('Venice')
+    }, 
+
+    {
+        from : places.name('Venice'), 
+        to   : places.name('Bologna')
+    }, 
+
+]
+
+*/
+
 
 const countryQuerySamples = ['ar', 'ir', 'ab', 'pc', 'ca', 'ma']
 

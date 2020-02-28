@@ -15,11 +15,11 @@ $(function() {
     let weirdWorldClient = { 
         countries   : require('../clientServerCommon/countries').countries, 
         cities      : require('../clientServerCommon/cities').cities, 
-        trips       : [], 
-   //   cuisines  : 
-//        friends     : 
-//      regions     :  require('../clientServerCommon/cities').cities,
- //     subregion   : 
+        trips       : require('../clientServerCommon/trips').trips,
+        cuisines    : null, 
+        friends     : null, 
+        regions     : require('../clientServerCommon/cities').regions, 
+        subregion   : null
  //shows: 
   //    languages   : 
    //   currencies  : 
@@ -47,6 +47,7 @@ $(function() {
             })
         }
     })
+
     .then( weirdWorldClient => {
         return require('./ui/discoverPane').discoverPane({
             clientApp: weirdWorldClient, 
@@ -58,7 +59,7 @@ $(function() {
         clientApp : weirdWorldClient, 
         containerID: 'userTripList'
     })
+
     require('./ui/tripVisual').tripDisplay( weirdWorldClient )
-  
    
 })

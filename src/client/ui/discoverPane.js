@@ -6,24 +6,24 @@
  * ***************************************************************************/
 "use strict"
 
- /****************************************************************************/
- /****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+
 let newCountryCard = function( country ) {
 
     return [
-        `<DIV class='countryCard discovered' style='margin-top:20px'>`,
+        `<DIV class='countryCard discovered ${country.region}'>`, 
         `<DIV style='display:flex'>`, 
-             `<DIV style="text-align:left;width:200px; color:blue; background-color:yellow; margin-left:5px">`, 
-                `<h3>${country.region}</h3>`, 
+             `<DIV style="text-align:left;width:200px;">`, 
                 country.subregion, 
              `</DIV>`, 
 
              `<DIV style="padding-left:20px; text-align:left">`, 
-                    `<h2>${country.name}</h2>`,
+                    `<h2 style="padding-right:10px">${country.name}</h2>`,
              `</DIV>`, 
         `</DIV>`,
-        `<DIV>Borders: ${country.borders.map(b => "<b>" + b + "</b>")}</DIV>`,
-        '</div>'
+        '</DIV>'
     ].join('')
 }
 
@@ -51,6 +51,7 @@ const discoverPane = function({
 }){
     discoverPaneModule.ready( containerID )
     clientApp.countries.forEach(country => discoverPaneModule.appendCard(country))
+    Sortable.create(document.getElementById(containerID))
     clientApp.ui.discoverPane = discoverPaneModule
 }
 

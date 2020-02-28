@@ -1,4 +1,12 @@
+/******************************************************************************
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ * client/server communications 
+ *
+ * ***************************************************************************/
 "use strict"
+ /****************************************************************************/
 
 
 const getServerData = function( route, query ){
@@ -13,15 +21,28 @@ const getServerData = function( route, query ){
     })
 } 
 
+
+let testServerDataFetch = function(dataFetchFunction){
+
+    return new Promise((resolve, reject) => {
+        dataFetchFunction('countryInfo', { country : 'ir' })
+        .then( testResult => resolve( true ))
+        .catch( err => resolve(false) )
+    })
+
+}
+
 const addDataFetchFeature = function( app ){ //adds ajax data fetch
+
     app.getServerData = (route, query) => getServerData( route, query )
-    return app.getServerData('countryInfo', {country : 'ir'})
-    .then( testResult => { //it worked, add feature
+    return testServerDataFetch( app.getServerData )
+    .then( testResult => {
+        if( testResult ){
             app.features.add("fetch data from server")
-            return app
-        })
-    .catch( result => {    //it didn't work, don't add
-        return app         //feature
+            app.locationFinder  = null
+            app.locationCreator = null
+        }
+        return app
     })
 }
 

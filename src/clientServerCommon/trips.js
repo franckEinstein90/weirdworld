@@ -2,17 +2,30 @@
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
  *
- * country class
+ * - Trip class
  *
  * ***************************************************************************/
 "use strict"
  /****************************************************************************/
 
+let Budget = function( ) {
+    
+    this.currency, 
+    this.onHand, 
+    this.estimatedCost
 
-const Trip = function(){
-   this.path = null
-   this.cost = null
 }
+
+
+const Trip = function( name ){
+
+    this.name = name
+    this.budget = new Budget()
+
+}
+
+
+
 
 const trips = (function(){
 
@@ -23,19 +36,24 @@ const trips = (function(){
       newTrip : function(){
 
       }, 
+
       editTrip : function(){
 
       }, 
+
       deleteTrip  : function(){
 
       }, 
+
       forEach : function( callback ){
          _trips.forEach(callback)
       }
 
    }
+
 })()
 
 module.exports = {
-   trips
+    Trip, 
+    trips
 }

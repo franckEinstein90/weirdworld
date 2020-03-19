@@ -8,7 +8,7 @@
  * ***************************************************************************/
 "use strict"
 /*****************************************************************************/
-const Trip = function{
+const Trip = function(){
 
     this.countries = []    
     this.estimatedCost = 0
@@ -35,8 +35,10 @@ const trips = (function(){
     }
 })()
 
+const addTripModule = function( app ){
+   debugger 
+}
 
 module.exports = {
-    trips, 
-    Trip
+    addTripModule
 } 

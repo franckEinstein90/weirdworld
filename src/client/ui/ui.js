@@ -15,30 +15,36 @@ const sections = [
     '#visualCanvas'
 ]
 
+const inputField = ({
+    icon,
+    inputID,  
+    placeholder
+}) => [ `<div class="w3-row w3-section">`, 
+            `<div class="w3-col" style="width:50px"><i class="w3-xxlarge ${icon}"></i></div>`, 
+            `<div class="w3-rest">`, 
+            `<input class="w3-input w3-border" id='${inputID}' `, 
+            `name="first" type="text" placeholder="${placeholder}">`, 
+            `</div>`, 
+        `</div>` ].join('')
+
+
 const ui = function( app ){
-    app.ui = { 
-        modal   : null
+
+    let createTrigger = (htmlID, action) => {
+        $(`#${htmlID}`).click(action)
     }
+    app.ui.addFeature({label: 'createTrigger', method: createTrigger})
+    app.ui.addFeature({label: 'createInput', method: inputField})
 
-    let _sections = sections.map( section => {
-            return {
-                handle  : section, 
-                height  : null, 
-                width   : null
-            } 
-    })
-    
-    let _readySize = () => _sections.forEach( section => {
-            section.height = $( section.handle ).height()
-            section.width  = $( section.handle ).width()
-    })
-
-    let _logSize = section => `${section.handle}: w-${section.width} h-${section.height}`
-   
-    app.features.add('ui')
     addModalFeature(app)
 }
 
+const addUiComponent = function( app ){
+    app.addComponent({label: 'ui'})
+    ui( app )
+    require('./appFrame').addAppFrameFeature( app )
+}
+
 module.exports = {
-    ui
+   addUiComponent 
 }

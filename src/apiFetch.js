@@ -43,8 +43,11 @@ const rapidAPIInterface = (function(){
             getCountryInfo(_options('ir'))
             .then(countryInfo => {
                if(countryInfo.find(country=>country.name === "Iran")){
-                  app.features.add( "getCountryInfo: gets country infor from rapidAPI" )
-                  app.getCountryInfo = c => getCountryInfo(_options(c))
+                  app.addFeature({
+                     label: "getCountryInfo", 
+                     description: "Info: gets country infor from rapidAPI", 
+                     method: c => getCountryInfo(_options(c))
+                  }) 
                   return resolve( app )
                }
                return resolve(app )
@@ -54,11 +57,11 @@ const rapidAPIInterface = (function(){
    }
 })()
 
-const addRapidApiDataFetchFeature  = async function( app ){
-   rapidAPIInterface.config( app.data.rapidApiKey )
+const mountRapidApiInterface = async function( app ){
+   rapidAPIInterface.config( app.localData.rapidApiKey )
    return rapidAPIInterface.test( app )
 }
 
 module.exports = {
-   addRapidApiDataFetchFeature
+    mountRapidApiInterface
 }

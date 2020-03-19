@@ -19,16 +19,7 @@ const showModal  = ({
 }
     
 const addModalFeature = function( app ){
-
-    app.features.add('modal window')
-    let _modalLogin = {
-      title: "member login"
-    }
-
-    let _modalWindows = new Map()
-    _modalWindows.set("login", _modalLogin)
-
-    app.ui.showModal = showModal
+    app.ui.addFeature({ label: 'modalWindow', method: showModal })
     return app 
 }
 

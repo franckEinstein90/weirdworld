@@ -10,6 +10,7 @@
 
 
 const getServerData = function( route, query ){
+    debugger
     return new Promise((resolve, reject)=>{
         $.ajax({
                 method: "GET",
@@ -34,16 +35,14 @@ let testServerDataFetch = function(dataFetchFunction){
 
 const addDataFetchFeature = function( app ){ //adds ajax data fetch
 
-    app.getServerData = (route, query) => getServerData( route, query )
-    return testServerDataFetch( app.getServerData )
-    .then( testResult => {
-        if( testResult ){
-            app.features.add("fetch data from server")
-            app.locationFinder  = null
-            app.locationCreator = null
-        }
-        return app
+    return new Promise((resolve, rejet) => {
+        app.addFeature({
+            label: 'serverFetch', 
+            method: (route, query) => getServerData(route, query)
+        })
+        return resolve(app)
     })
+
 }
 
 module.exports = {

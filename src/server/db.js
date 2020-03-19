@@ -13,28 +13,26 @@
 /*****************************************************************************/
 const sqlite3 = require('sqlite3').verbose()
 /*****************************************************************************/
-const appData = require('@src/appData').appData
-/*****************************************************************************/
+
 const db = (function(){
 
     let _db = null
+    let _app = null
 
     return {
 
-        configure: function({
-            filePath
-        }){
-            return new Promise(( resolve, reject) => {
+        configure: function( app ){
+
+            return new Promise( resolve => {
+                _app = app
                 _db = new sqlite3.Database(
-                    filePath, err => {
-                        if ( err ) {
-                            resolve( false )
-                        } else {
+                        `${app.root}\${app.settingsDBPath}`, 
+                        err => {
+                            if ( err ) return resolve( false )
                             return resolve(true)
-                        }
-                    })
-            })
-        }, 
+                        })
+                })
+        },
         
         createRecord: function({
             table, 
@@ -75,12 +73,48 @@ const db = (function(){
                     }
                 })
             })
-        }
+        }, 
+
+        getAllTableRows: function({
+            table, 
+            where
+        }){
+            let whereStatement = ''
+            if( where ) whereStatement = ` WHERE ${where}`
+
+            return new Promise((resolve, reject) => {
+
+                let SQLStatement = `SELECT * FROM ${table} ${whereStatement};`
+                _db.all(SQLStatement, (err, rows)=>{
+                    if(err){
+                        return reject( err )
+                    } else {
+                        return resolve( rows ) 
+                    }
+                })
+            })
+        } 
     }
 
 })()
 
+const addLocalDatabase = function( app ){
+    return db.configure( app )
+    .then( result => {
+
+            if(!result) return app
+            app.addComponent({
+                label: 'localDb', 
+                methods: db
+                })
+            return app
+
+     })
+     .catch( err => {
+          return resolve(app)
+     })
+}
 
 module.exports = {
-    db
+    addLocalDatabase
 }

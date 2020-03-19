@@ -50,20 +50,39 @@ const onListening = function(addr) {
     debug('Listening on ' + bind);
 }
 
-const httpServer = function( app ) {
-
-    let _port = normalizePort(process.env.PORT || app.data.port)
-    app.expressStack.set('port', _port)
-
-    let _server = http.createServer(app.expressStack)
-    _server.listen(_port)
-    _server.on('error', x => onError(_port))
-    _server.on('listening', x => onListening(_server.address()))
-
-    app.say(`App running on port ${_port}`)
-    return app 
+const helloWorldListener  = function(req, res){
+    res.writeHead(200)
+    res.end('Hello World from httpServer')
 }
 
+const _httpServer = function( app ) {
+
+    app.port = app.implements('localData.port')
+        ? app.port
+        : normalizePort( process.env.PORT || 3000)
+
+    app.expressStack.set('port', app.port)
+    let _server = http.createServer( app.expressStack )
+           
+
+    _server.on('error'      , x => onError( app.port , x ))
+    _server.on('listening'  , x => onListening( _server.address()))
+     
+
+    return {
+
+        start   : function(){
+            _server.listen(app.port)
+           app.say(`App running on port ${app.port}`)
+           return app 
+        }
+    }
+}
+
+const httpServer = function( app ){
+    app.server = _httpServer( app ) 
+    return app
+}
 
 module.exports = {
     httpServer

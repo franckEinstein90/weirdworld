@@ -13,9 +13,9 @@ const ExpressOIDC = require('@okta/oidc-middleware').ExpressOIDC
 const session     = require('express-session').session
 /*****************************************************************************/
 /*const appData = require('@src/appData').appData*/
-const appRoot   = require('@routes/appRoot').appRoot/*
-const appStatus = require('@src/appStatus').appStatus
-const user = require('@user/user').user
+//const appRoot   = require('@routes/appRoot').appRoot/*
+//onst appStatus = require('@src/appStatus').appStatus
+//const user = require('@user/user').user
 /*****************************************************************************/
 const whiteList = []
 
@@ -31,7 +31,10 @@ const corsOptions = {
 
 
 const routingSystem = function( app ){
-  
+    return new Promise((resolve, reject)=>{
+        return resolve( app )
+    })
+}
  /*   app.use(session({
         secret: appData.appSecret, 
         resave: true, 
@@ -39,8 +42,8 @@ const routingSystem = function( app ){
     }))
     app.use(oidc.router)*/
   //  let router = express.Router()
-   // expressStack.use('/', router)
-    app.expressStack.get('/', appRoot.render)
+  //  app.expressStack.use('/', router)
+//    app.expressStack.get('/', appRoot.render)
 
     /*expressStack.get('/protected', app.authSystem.ensureAuthenticated(), (req, res)=>{
         res.send('top secred')
@@ -48,7 +51,7 @@ const routingSystem = function( app ){
 
    
    
-    app.expressStack.post('/login'   , ()=>{
+   /* app.expressStack.post('/login'   , ()=>{
         debugger
     })
       /*  
@@ -58,7 +61,7 @@ const routingSystem = function( app ){
     router.get('/trips'    , oidc.ensureAuthenticated(), user.getTrip )
 , 
 */
-    let countryInfo = function(req, res, next) {
+  /*  let countryInfo = function(req, res, next) {
             let countryName = req.query.country
             app.getCountryInfo(countryName)
             .then( results => {
@@ -68,7 +71,7 @@ const routingSystem = function( app ){
     app.expressStack.get('/countryInfo'   , countryInfo )
 /*    router.get('/appStatus'     , oidc.ensureAuthenticated(), appStatus.report )
 */
-    app.expressStack.use(function(req, res, next) {
+  /*  app.expressStack.use(function(req, res, next) {
         next(createError(404));
     })
     // error handler
@@ -81,9 +84,7 @@ const routingSystem = function( app ){
         res.status(err.status || 500);
         res.render('error');
     }) 
-    
-    return app
-}
+   */ 
 
 module.exports = {
     routingSystem

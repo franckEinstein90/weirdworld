@@ -59,7 +59,7 @@ const addDemoData = function( {
    numCities}){
 
    let demoCountryQuery = pickRandom( countryQuerySamples )
-   return clientApp.getServerData('countryInfo', {
+   return clientApp.serverFetch('countryInfo', {
       country: demoCountryQuery 
    })
    .then( countryData => {

@@ -1,30 +1,32 @@
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
- * 20200000000000000000000000000000
+ * 00000000000000000000000000000000
  *
  *
  * ***************************************************************************/
+
 "use strict"
 
 /*****************************************************************************/
-const clock = require('@src/time/timeKeepers').clock
+const hbs = require('express-handlebars')
 /*****************************************************************************/
 
-const appClock = function( app ){
+const viewSystem = function({
+    app,
+    root,
+    layoutsDir,
+    partialsDir
+}) {
+    app.engine('hbs', hbs({
+        extname: 'hbs',
+        defaultLayout: 'main',
+        layoutsDir,
+        partialsDir
+    }))
+    app.set('view engine', 'hbs');
 
-    let _clock = new clock.Clock({
-            cout    : app.say, 
-            events  : app.events
-    })
-
-    app.addComponent({label: 'time'})
-    app.time.addFeature({
-        label: 'clock', 
-        method: _clock
-    })
-    return app
 }
 
 module.exports = {
-    appClock
+    viewSystem
 }

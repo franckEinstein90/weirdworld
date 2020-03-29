@@ -4,20 +4,21 @@
   "description": "",
   "main": "weirdworld.js",
   "scripts": {
-    "start": "node weirdworld.js",
-    "dev": "nodemon weirdworld.js",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "_moduleAliases": {
+    "@appEngine"  : "src/server/appEngine", 
     "@src": "src",
     "@routes": "src/routes",
     "@events": "src/events",
     "@utils": "src/utils",
     "@services": "src/services",
     "@server": "src/server",
-    "@viewSystem": "src/viewSystem",
+    "@viewSystem": "src/server/viewSystem",
     "@errors": "src/errors.js",
-    "@users": "src/users"
+    "@user": "src/server/users/user"
   },
   "author": "franckeinstein90",
   "license": "ISC",

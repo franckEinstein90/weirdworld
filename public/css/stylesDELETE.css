@@ -1,13 +1,108 @@
-@import "colors.css"; 
-@import "desktop.css"; 
-@import "sidebar.css";
-
-
-#leftTop{
-    position: absolute; 
-    background-color: blue;
-    width: 100%; 
+:root{
+    --main: #F8FFFF; 
+    --crackle: #909090; 
+    --bang: #330022; 
+    --pop : #00C600; 
+    --snaple : #F70000;
+    --crash : #B77000;
+    --peaky : #C25800; 
+    --sky : #009494;
+    --sun : #FFA860; 
 }
+
+html {
+    scroll-behavior: smooth;
+}
+
+html,body,h1,h2,h3,h4,h5 {
+    font-family: "Raleway", sans-serif;
+}
+
+body{
+  background-color: var(--main);
+  margin: 0;
+  font-family: "Lato", sans-serif;
+}
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  padding-top: 50px;
+  color: var(--pop);  
+  width: 200px;
+  background-color: var(--sky); 
+  border-left: 10px inset var(--pop); 
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+  box-shadow: 4px 4px; 
+}
+
+.sidebar a {
+  display: block;
+  color: var(--crash);
+  padding: 16px;
+  text-decoration: none;
+}
+ 
+.sidebar a.active {
+  background-color: var(--pop);
+  color: var(--pop);
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+.sidebar P{
+    color:var(--main); 
+    font-weight:bold; 
+    font-size: 1.3em;
+}
+
+.leftNavIcon{
+    color: var(--main);
+    padding-right:3px; 
+    box-shadow: 0px 1px; 
+}
+
+.topNav{
+    border-left: 10px inset var(--pop); 
+    background-color : var(--crash); 
+    color : var(--pop);
+    z-index : 4;
+    height : 45px; 
+    display : block;
+    padding-left :20px;
+    box-shadow : 4px 4px; 
+}
+
+.topNav button {
+    color: var(--main);
+    font-size: 1.2em; 
+    display: block;
+    padding-top:10px;
+    cursor: pointer; 
+}
+ 
+.topNav sidebar a.active {
+  background-color: var(--snaple);
+}
+
+.topNav sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+
+div.content {
+  color: var(--pop); 
+  margin-left: 200px;
+  padding: 1px 16px;
+  height: 1000px;
+}
+
 #userPane{
   flex:50%;
   max-width:100%;
@@ -17,39 +112,10 @@
   margin-right:20px;  
 }
 
-.visualCmdIcon{
-    margin-top: 5px; 
-    width: 100px;  
-    border: none;
-    color: var(--crash);  
-}
-
-.visualCmdIcon button {
-    background-color: var(--snaple); 
-}
-
-.visualCmdIcon i{
-    margin-top: 4px; 
-    color: var(--sky);  
-    font-size: 1.5em; 
-}
-
-.visualCmd {
-    background-color: var(--sky);
-    text-align: right;  
-    margin-top: 20px;
-    margin-bottom: 30px;  
-    border: 1px inset var(--crash); 
-    color: var(--main); 
-    box-shadow: 1px 1px; 
-}
-
-.visualCmd div{
-    font-size: 1.2em; 
-    font-family: "Lato", sans-serif;
-    margin-right: 20px;  
+#userPane H1{
+    width: 80%;
     border: black 1px inset;  
-    background-color: var(--sky); 
+    background-color: var(--crash); 
     color: var(--main);
     text-align: right;
     padding-right: 10px;  
@@ -80,7 +146,6 @@
     background-color : var(--sky);
     color : var(--main)
 }
-
 .weirdWorld button {
     background-color: var(--sky);
     color : var(--main); 
@@ -98,28 +163,14 @@
 }
 
 #visualCanvas{
-    background-image: url("https://www.fodors.com/wp-content/uploads/2019/11/HERO_Venice__FloatingCityBuilt_iStock-986940360.jpg"); 
-    background-color: var(--main);
-    opacity:0.8; 
-    height:400px; 
-    width:100% ; 
-    border: 1px inset black;  
-}
-
-#userTripList {
-    margin-top: 10px; 
-}
-
-#userTripList THEAD{
-    font-family: Raleway; 
-    color: var(--main); 
-    background-color: var(--wood); 
+  background-color: var(--main);
+  opacity:0.8; 
+  height:800px; 
+  width:100% ; 
+  border: 1px inset black;  
 }
 
 
-#userTripList TR TD{
-    font-size: 0.9em; 
-}
 
 #discoverPane{
   flex:50%; 
@@ -136,13 +187,10 @@
 }
 
 /*styles for user list of trips*/
-
 .tripList h2 {
-    margin-top: 20px; 
     color: var(--main);
-    text-align: center; 
-    font-size: 1.5em;  
-    background-color: var(--peaky); 
+    text-align: center;  
+    background-color: var(--crash); 
     border: black inset 1px; 
     box-shadow: 4px 4px; 
 }
@@ -157,8 +205,7 @@
 }
 
 .tripList li{
-    cursor      : pointer; 
-    font-size   : 1.0em; 
+    font-size       : 1.4em; 
     border          : black 1px inset;
     margin-bottom   : 5px;
     padding-left    : 5px;   
@@ -174,12 +221,11 @@
   margin-top:10px;
   background-color: var(--crash);
   color: var(--main);
-  font-size:1.5em;
+  font-size:2em;
   border: black 1px inset;
 }
 
 #findCountryInput{
-    background-color: var(--main); 
     font-size       : 2em;
     margin-top      : 5px;
     border-top      : var(--sky) 1px inset; 
@@ -204,14 +250,13 @@
 }
 
 .discoveredCountries li{
-
-    font-size : 1.5em; 
-    border : 1px inset var(--crash); 
-    cursor : pointer;
-    padding-left : 20px; 
+    font-size       : 1.5em; 
+    border          : 1px inset var(--crash); 
+    cursor          : pointer;
+    padding-left    : 20px; 
     padding-right   :20px; 
     text-align      :left;
-    background-color  : var(--pop); 
+    background-color  : var(--crash); 
     color: var(--main);
     width:100%;
     margin-top: 5px; 
@@ -219,9 +264,12 @@
     box-shadow: 4px 4px; 
  
 }
-
 .dicoveredCountries li i{
     float: right; 
+}
+.countryCard:hover {
+  background-color: var(--crash);
+  color:var(--sky)
 }
 
 .discovered {
@@ -246,67 +294,6 @@
 .settingsItem {
   cursor: pointer
 }
-
-.countryCard {
-    cursor      : pointer; 
-    padding-left: 5px; 
-    padding-top: 5px; 
-    padding-bottom  : 10px; 
-    margin-top:20px; 
-    height: 90px;
-    border: 1px inset var(--ink); 
-    border-radius: 0px 10px;  
-}
-
-.countryCard:hover {
-  background-color: var(--crash);
-  color:var(--sky); 
-}
-
-.Europe{
-    background-color: var(--crash); 
-    color: var(--main); 
-}
-
-.Europe::before{
-    content: "Europe";
-}
-
-.Africa {
-    background-color: var(--snaple); 
-    color: var(--main); 
-}
-
-.Africa::before {
-    content: "Africa"; 
-}
-
-.Asia {
-    background-color: var(--bang); 
-    color: var(--main); 
-}
-
-.Asia::before {
-    content: "Asia"; 
-}
-
-.Americas {
-    background-color: var(--sun); 
-    color: var(--peaky); 
-}
-
-.Americas::before {
-    content: "America"; 
-}
-
-.Oceania {
-    background-color: var(--sky); 
-    color: var(--main); 
-}
-.Oceania::before{
-    content: "Oceania"; 
-}
-
   /* Safari */
   @-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }
@@ -317,6 +304,3 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-
-
-

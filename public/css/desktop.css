@@ -10,6 +10,54 @@ body{
   background-color: var(--main);
   margin: 0;
   font-family: "Lato", sans-serif;
+  -ms-overflow-style: none; 
+}
+
+body::-webkit-scrollbar {
+    display: none; 
+}
+
+#topNav, #bottomNav {
+    width: 100%;  
+    position: absolute;
+    border-left: 10px inset var(--pop); 
+    z-index : 4;
+    color : var(--main);
+    display : block;
+    background-color : var(--peaky); 
+} 
+
+#topNav {
+    padding-left :20px;
+    box-shadow : 4px 4px; 
+}
+
+#topNav button {
+    width: 100px; 
+    background-color: var(--peaky);
+    border-left: 1px inset var(--main); 
+    color: var(--main);
+    font-size: 1.0em;
+    font-style: italic; 
+    font-stretch: ultra-expanded;  
+    display: block;
+    margin-top:10px;
+    cursor: pointer; 
+}
+
+
+#topNav sidebar a.active {
+  background-color: var(--snaple);
+}
+
+#topNav sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+#content {
+    position: absolute; 
+    color: var(--peaky); 
 }
 
 

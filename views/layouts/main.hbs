@@ -13,7 +13,15 @@
 </head>
 
 <body>
-    {{>modal}} 
-    {{{body}}}      
+
+{{>modal}}
+<div id='topNav'>{{>nav/topNav}}</div>
+<div id='bottomNav'></div>
+
+<div id='content'>
+    {{{body}}}
+</div>
+
+{{>scripts/scripts}}
 </body>
 </html>

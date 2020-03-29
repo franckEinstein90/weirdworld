@@ -66,11 +66,13 @@ const mountAppEngine = function( app ){
         }
  
 
-        return app.addFeature({
+        app.addFeature({
             label     : 'run', 
             method    : appRun, 
             mountFile : __filename
         })
+
+        return app
     })
 }
 

@@ -58,7 +58,7 @@ const rapidAPIInterface = (function(){
 })()
 
 const mountRapidApiInterface = async function( app ){
-   if(app.data.rapidAPIKey){
+   if(app.localData.rapidAPIKey){
       rapidAPIInterface.config( app.localData.rapidApiKey )
       return rapidAPIInterface.test( app )
    }

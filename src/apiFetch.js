@@ -58,8 +58,11 @@ const rapidAPIInterface = (function(){
 })()
 
 const mountRapidApiInterface = async function( app ){
-   rapidAPIInterface.config( app.localData.rapidApiKey )
-   return rapidAPIInterface.test( app )
+   if(app.data.rapidAPIKey){
+      rapidAPIInterface.config( app.localData.rapidApiKey )
+      return rapidAPIInterface.test( app )
+   }
+   return app
 }
 
 module.exports = {

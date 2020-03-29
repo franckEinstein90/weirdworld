@@ -6,96 +6,101 @@
  * 
  * ***************************************************************************/
 "use strict"
- /****************************************************************************/
-const Feature = function( options ){
+ /****************************************************************************//*****************************************************************************/
+"use strict"
+/*****************************************************************************/
 
-    this.method     = null
-    this.label      = null
-    this.mountFile  = null
+class Feature {
 
-    if( options.method ){
-        this.label = options.method.constructor.name
-        this.method = options.method
+    constructor( options ){
+        this.label          = options.label
+        this.implemented    = options.implemented || false
+        this.method         = options.method || false
     }
-    if (options.label)      this.label      = options.label
-    if (options.mountFile)  this.mountFile  = options.mountFile 
 
 }
-const AppComponent = function( componentDefinition ) {
 
-    let _features = new Map()
+function AppComponent( componentDefinition ){
+
     this.label = componentDefinition.label
+    let _features = new Map()
 
-    if('methods' in componentDefinition){
-        Object.keys(componentDefinition.methods).forEach((key, index)=>{
-            if(key === 'configure') return 
-            _features[key] = true
-            this[key] = componentDefinition.methods[key]
-        })
+    if('methods' in componentDefinition) {
+        Object.keys(componentDefinition.methods).forEach(
+            (key, index)=>{
+                if(key === 'configure') return
+                _features[key] = true
+                this[key] = componentDefinition.methods[key]
+            })
     }
 
-    this.addFeature =  feature => {
-        try {
-            let newFeature = new Feature(feature)
-            _features.set(newFeature.label, newFeature)
-        } catch (err){
-            throw err
-        } finally{
-            return this 
-        }
+    this.addFeature =  function(feature){
+        if(!('label' in feature)) throw 'error in feature definition'
+        if(_features.has(feature.label)) throw "feature already exists"
+        _features.set( feature.label, feature)
+        if('method' in feature) this[ feature.label ] = feature.method
     }
-
 }
 
 const featureSystem = function( app ){
 
-    let _features = new Map()
-    let _components = new Map()
+    let _features       = new Map()
+    let _components     = new Map()
+    let _reqMajor       = 0
+    let _requirements   = new Map()
 
     return {
-        get listFeatures(){
-            let featureList = {}
-            _features.forEach((feature, featureTag)=>{
-                featureList[featureTag] = feature
+
+        get list()  {
+            let features = {}
+            _features.forEach((value, key)=>{
+                features[key] = value
             })
-            return featureList
-        }, 
+            return features
+        },
 
-        addComponent: function( componentInfo ){
-            if(!('label' in componentInfo )) throw "Unable to find label property in component definition"
-            let component = new AppComponent( componentInfo )
-            _components.set(componentInfo.label, component)
-            app[componentInfo.label] = component
-            return app
-        }, 
+        implements  : featureLabel => _features.has(featureLabel), 
 
-        addFeature: function ( feature ) {
-            try {
-                let newFeature = new Feature(feature)
-                _features.set( newFeature.label, newFeature)
-                if(newFeature.method) app[feature.label] = newFeature.method
-            } catch ( err ){
-                throw "unable to create new feature"
-            } finally {
-                return app
+        addRequirement  : function({
+            req, 
+            parentReq
+        }) {
+            if( parentReq === undefined || parentReq === null){
+                _reqMajor += 1
+                _requirements.set(  _reqMajor, req)
             }
-       }, 
+        },
 
-       implements: function(featureLabel){
-            return _features.has(featureLabel)
-       }
+        includes: featureName => {
+            if(_features.has(featureName)) return _features.get(featureName)
+            return false
+        },
+
+        addComponent : function( componentInfo ){
+            let newComponent = new AppComponent( componentInfo )
+            _components.set(newComponent.label, newComponent)
+            app[newComponent.label] = newComponent 
+        }, 
+
+        add : function( feature ){
+            if(!('label' in feature)) throw 'error in feature definition'
+            if(_features.has(feature.label)) throw "feature already exists"
+            _features.set( feature.label, feature)
+            if('method' in feature) app[ feature.label ] = feature.method
+        }
     }
 }
 
 const mountFeatureSystem = function( app ){
 
-    let featureModule   = featureSystem( app )
-    app.addFeature      = featureModule.addFeature
-    app.addComponent    = featureModule.addComponent
-    app.implements      = featureModule.implements
-    Object.defineProperty(app, 'features', {get: ()=>featureSystem.listFeatures})
+    let features = featureSystem( app )
+    Object.defineProperty( app, 'features', {get: () => features.list})
+    app.addRequirement = features.addRequirement        
+    app.addComponent   = features.addComponent
+    app.Feature = Feature
+    app.addFeature = features.add
+    app.implements = features.implements
     return app
-
 }
 
 module.exports = {

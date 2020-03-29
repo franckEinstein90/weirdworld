@@ -14,6 +14,10 @@ const path = require('path')
 const runApp = app => {
   //  if( app.features.clock ) app.clock.start()
     app.say (`${app.nextState()} ${app.name}` ) 
+    app.express = require('express')()
+    const port = 3000
+    app.express.get('/', (req, res) => res.send('Hello World!'))
+    app.express.listen(port, () => console.log(`Example app listening on port ${port}!`))
 }
  
 const appStages = (function(){
@@ -44,7 +48,7 @@ const weirdWorld = {
 }
 
 
-require('@src/clientServerCommon/features').addFeatureSystem( weirdWorld ) 
+require('@src/common/features').mountFeatureSystem( weirdWorld ) 
 require('@src/weirdworld').configApp( weirdWorld )
 .then( weirdWorld => {
 /*    weirdWorld.addEvent({
@@ -61,7 +65,7 @@ require('@src/weirdworld').configApp( weirdWorld )
 })
 
 .then( weirdWorld => {
-    return require('@src/apiFetch').addRapidApiDataFetchFeature( weirdWorld )
+    return require('@src/apiFetch').mountRapidApiInterface( weirdWorld )
 })
 
 .then( weirdWorld => {   

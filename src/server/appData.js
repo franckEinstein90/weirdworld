@@ -40,9 +40,13 @@ const appData = function( app ){
 }
 
 const mountAppData = function( app ){
-    app.addComponent({
-        label   : 'localData', 
-        methods : appData( app )
+    return new Promise((resolve, reject) => {
+        app.tools.say(['mounting app local data'])
+        app.featureSystem.addComponent({
+            label   : 'localData', 
+            methods : appData( app )
+        })
+        return resolve( app )
     })
 }
 

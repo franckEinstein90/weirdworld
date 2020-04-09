@@ -7,12 +7,50 @@
  * ***************************************************************************/
 "use strict"
  /****************************************************************************/
+ const UIElement = require('./uiElement').UIElement
+
 const deviceRatios = [
     {id: 1, ratio: '4x3'}, 
     {id: 2, ratio: '16x9'}, 
     {id: 3, ratio: '3x2'}
 ]
-    
+   
+const cssDef = options => screen => {
+    let assign = (value, property) => {
+        if(typeof value[property] === 'function'){
+            return value[property](screen)
+        } else {
+            return value[property]
+        }
+    }
+    let height = 0
+    let width = 0
+    if(options.width) width = assign( options, 'width')
+    if(options.height) height = assign( options, 'height')
+    return {
+        left: 0, 
+        top: 0, 
+        width, 
+        height
+    }    
+}
+
+let bottomNavCss = cssDef({ 
+    width: s => s.width, 
+    height: s => s.orientation === 'portrait' ? 55 : 30 
+})
+
+let contentCss = cssDef({
+    width: s => s.width
+})
+
+let topNavCss    = cssDef({
+    width: s => s.width,
+    height:55
+})
+
+let bottomRightCss = cssDef({})
+
 
 const _screenDimensions = _ => {
     let height =  $( window ).height()
@@ -24,12 +62,7 @@ const _screenDimensions = _ => {
         orientation
     }
 }
-
-const _setHeight  = (element, height) => {
-    element.height(height)
-}
 const _contentInnerLayout = ( contentViewport, screen) => {
-
 
     let leftTopCss = {
         top     : contentViewport.top, 
@@ -97,28 +130,7 @@ const _configureLayout = ( app ) => {
     _contentInnerLayout(contentViewport, screen)
 }
 
-const cssDef = options => screen => {
-    let height = 0
-    if(options.height){
-        if(typeof options.height === 'function') {
-            height = options.height(screen)
-        } else {
-            height = options.height
-        }
-    }
-       return {
-           top: 0, 
-           height,
-           left:0
-       }     
-}
-
-let bottomNavCss = cssDef({ height: s => s.orientation === 'portrait' ? 55 : 30 })
-let topNavCss    = cssDef({height:55})
-let bottomRightCss = cssDef({})
-
 const uiFrame = function( app ){
-    debugger
     app.ui.visualElements = {
         topNav          : topNavCss, 
         bottomNav       : bottomNavCss, 
@@ -129,11 +141,23 @@ const uiFrame = function( app ){
     $(window).resize(()=> {
         _configureLayout( app )
     })
+   return app
 
 }
 
+
+
 const addAppFrameFeature = function( app ){
+
+    Object.defineProperty(app.ui, 'screen', { get: function(){
+        return new this.geometry.Rectangle({
+            height:  $( window ).height(),
+            width: $( window ).width()
+        })
+    }})
+
     uiFrame( app )
+    require('./bottomNav').addFeature( app )
     return app
 }
 

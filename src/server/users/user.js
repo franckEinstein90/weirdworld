@@ -129,7 +129,7 @@ const addUserModule = function( app ){
 
     let userRoutes = _userRoutes( app )
 
-    app.addComponent({
+    app.featureSystem.addComponent({
         label: 'userModule'
     })
 

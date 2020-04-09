@@ -20,28 +20,22 @@ body::-webkit-scrollbar {
 #topNav, #bottomNav {
     width: 100%;  
     position: absolute;
-    border-left: 10px inset var(--pop); 
     z-index : 4;
     color : var(--main);
     display : block;
-    background-color : var(--peaky); 
+    background-color : var(--sun); 
 } 
 
-#topNav {
-    padding-left :20px;
-    box-shadow : 4px 4px; 
-}
 
 #topNav button {
     width: 100px; 
-    background-color: var(--peaky);
+    background-color: var(--pop);
     border-left: 1px inset var(--main); 
     color: var(--main);
     font-size: 1.0em;
     font-style: italic; 
     font-stretch: ultra-expanded;  
     display: block;
-    margin-top:10px;
     cursor: pointer; 
 }
 

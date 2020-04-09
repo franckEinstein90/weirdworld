@@ -57,30 +57,31 @@ const helloWorldListener  = function(req, res){
 
 const _httpServer = function( app ) {
 
-    app.port = app.implements('localData.port')
+    app.port = app.featureSystem.implements('localData.port')
         ? app.port
         : normalizePort( process.env.PORT || 3000)
 
-    app.expressStack.set('port', app.port)
-    let _server = http.createServer( app.expressStack )
-           
+    app.express.set('port', app.port)
 
+    let _server = http.createServer( app.express)
     _server.on('error'      , x => onError( app.port , x ))
     _server.on('listening'  , x => onListening( _server.address()))
-     
+
+    let _io = require('socket.io')(_server)
 
     return {
+        io : _io,
 
         start   : function(){
             _server.listen(app.port)
-           app.say(`App running on port ${app.port}`)
+           app.tools.say(`App running on port ${app.port}`)
            return app 
         }
     }
 }
 
 const httpServer = function( app ){
-    app.server = _httpServer( app ) 
+    app.server = _httpServer( app )
     return app
 }
 

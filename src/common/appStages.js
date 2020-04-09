@@ -29,7 +29,7 @@ const _addAppStatusModule = function( app ){
 
 const mountStatusModule = function(app){
 
-    return app.addFeature({
+    return app.featureSystem.addFeature({
         label     : 'status', 
         method    : _addAppStatusModule( app ), 
         mountFile : path.basename(__filename)

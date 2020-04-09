@@ -3,69 +3,6 @@
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
  *
- * client side entry point 
- *
- * ***************************************************************************/
-"use strict"
- /****************************************************************************/
-
-
-$(function() {
-
-
-    let weirdWorldClient = { 
-        //countries   : require('../clientServerCommon/countries').countries, 
-        //cities      : require('../clientServerCommon/cities').cities, 
-        cuisines    : null, 
-        friends     : null, 
-       // regions     : require('../clientServerCommon/cities').regions, 
-        subregion   : null
- //shows: 
-  //    languages   : 
-   //   currencies  : 
-    //  cultures    : 
-        //poets : 
-        //painters: 
-    //  climate     : 
-
-    }
-    require('../common/features').mountFeatureSystem( weirdWorldClient )
-    require('./ui/ui').addUiComponent(                weirdWorldClient )
-    require('./serverComs.js').addDataFetchFeature(   weirdWorldClient ) 
-    .then( weirdWorldClient => {
-        require('./user/users').addLoginFeature(      weirdWorldClient )
-/*
-        return require('./demo.js').addDemoData({ 
-            clientApp       : weirdWorldClient, 
-            numCountries    : 10, 
-            numCities       : 20, 
-            numTrips        : 3
-            })*/
-    })/*
-    .then( weirdWorldClient => {
-        require('./user/trips').addTripModule( weirdWorldClient )
-        require('./ui/discoverPane').discoverPane({
-            clientApp: weirdWorldClient, 
-            containerID: 'discover'
-        })
-        return weirdWorldClient
-    })
-    .then( weirdWorldClient => {
-        require('./ui/tripTabular').tripTabular({
-            clientApp : weirdWorldClient, 
-            containerID: 'userTripList'
-        })
-
-        require('./ui/tripVisual').tripDisplay( weirdWorldClient )
-    })*/
-  
-})
-
-},{"../common/features":7,"./serverComs.js":2,"./ui/ui":5,"./user/users":6}],2:[function(require,module,exports){
-/******************************************************************************
- * WeirdWorld - By FranckEinstein90
- * 20200000000000000000000000000000
- *
  * client/server communications 
  *
  * ***************************************************************************/
@@ -74,7 +11,6 @@ $(function() {
 
 
 const getServerData = function( route, query ){
-    debugger
     return new Promise((resolve, reject)=>{
         $.ajax({
                 method: "GET",
@@ -100,7 +36,7 @@ let testServerDataFetch = function(dataFetchFunction){
 const addDataFetchFeature = function( app ){ //adds ajax data fetch
 
     return new Promise((resolve, rejet) => {
-        app.addFeature({
+        app.featureSystem.addFeature({
             label: 'serverFetch', 
             method: (route, query) => getServerData(route, query)
         })
@@ -113,7 +49,7 @@ module.exports = {
     addDataFetchFeature
 } 
 
-},{}],3:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -123,12 +59,123 @@ module.exports = {
  * ***************************************************************************/
 "use strict"
  /****************************************************************************/
+
+$(function() {
+
+
+    let weirdWorldClient = { 
+    }
+
+    weirdWorldClient.socket = io()
+    require('../common/features').mountFeatureSystem( weirdWorldClient )
+    require('./ui/main').addUiComponent( weirdWorldClient )
+    require('./io/main').addDataFetchFeature( weirdWorldClient ) 
+    require('./users/main').addUserManagement( weirdWorldClient )
+    require('./ui/tripVisual').tripDisplay( weirdWorldClient) 
+
+})
+
+
+},{"../common/features":11,"./io/main":1,"./ui/main":7,"./ui/tripVisual":9,"./users/main":10}],3:[function(require,module,exports){
+/*******************************************************************************
+ *  ui feature for bottom status bar of client app
+ ******************************************************************************/
+"use strict"
+/******************************************************************************/
+
+/******************************************************************************/
+
+
+const bottomNav = function( app ){
+
+    let msgs = {
+        clientStatus: 'client loaded', 
+        serverStatus: 'waiting for message', 
+        queryStatus: 'N/A'
+    } 
+
+    let updateTicker = () => {
+        let statusBarContent = [
+            `client: ${msgs.clientStatus}`, 
+            `server: ${msgs.serverStatus}`, 
+            `query: ${msgs.queryStatus}`
+        ].join(' | ')
+        $('#bottomNav').text(statusBarContent)
+    }
+
+    app.socket.on('updateBottomStatusInfo', function( data ) {
+        if('serverStatus' in data){
+            msgs.serverStatus = data.serverStatus
+        }
+        updateTicker()
+    })
+
+    updateTicker()
+    return app
+}
+
+
+const addFeature = function( app ){
+    return bottomNav( app )
+}
+
+module.exports = {
+    addFeature
+}
+},{}],4:[function(require,module,exports){
+/******************************************************************************
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ * client side entry point 
+ *
+ * ***************************************************************************/
+"use strict"
+ /****************************************************************************/
+ const UIElement = require('./uiElement').UIElement
+
 const deviceRatios = [
     {id: 1, ratio: '4x3'}, 
     {id: 2, ratio: '16x9'}, 
     {id: 3, ratio: '3x2'}
 ]
-    
+   
+const cssDef = options => screen => {
+    let assign = (value, property) => {
+        if(typeof value[property] === 'function'){
+            return value[property](screen)
+        } else {
+            return value[property]
+        }
+    }
+    let height = 0
+    let width = 0
+    if(options.width) width = assign( options, 'width')
+    if(options.height) height = assign( options, 'height')
+    return {
+        left: 0, 
+        top: 0, 
+        width, 
+        height
+    }    
+}
+
+let bottomNavCss = cssDef({ 
+    width: s => s.width, 
+    height: s => s.orientation === 'portrait' ? 55 : 30 
+})
+
+let contentCss = cssDef({
+    width: s => s.width
+})
+
+let topNavCss    = cssDef({
+    width: s => s.width,
+    height:55
+})
+
+let bottomRightCss = cssDef({})
+
 
 const _screenDimensions = _ => {
     let height =  $( window ).height()
@@ -140,9 +187,42 @@ const _screenDimensions = _ => {
         orientation
     }
 }
+const _contentInnerLayout = ( contentViewport, screen) => {
 
-const _setHeight = (element, height) => {
-    element.height(height)
+    let leftTopCss = {
+        top     : contentViewport.top, 
+        height  : contentViewport.height,
+        width   : contentViewport.width
+    } 
+ 
+    if($('#leftOrTop').length){
+        if (screen.orientation === 'portrait'){
+            leftTopCss.top    = contentViewport.top
+            leftTopCss.height = contentViewport.height / 2
+            leftTopCss.width =  contentViewport.width
+        } else {
+            leftTopCss.width = contentViewport.width / 2 
+        } 
+       $('#leftOrTop').css( leftTopCss )
+    }
+
+    let bottomOrRightCss = {
+        top: leftTopCss.top,  
+        height: contentViewport.height,
+        width: contentViewport.width/2, 
+        left: contentViewport.width/2 
+    } 
+    if($('#rightOrBottom').length){
+        if (screen.orientation === 'portrait'){
+            bottomOrRightCss.top    = contentViewport.top + (contentViewport.height / 2) 
+            bottomOrRightCss.height = contentViewport.height / 2 
+            bottomOrRightCss.width  = contentViewport.width
+            bottomOrRightCss.left   = 0 
+        } else {
+
+        } 
+       $('#rightOrBottom').css( bottomOrRightCss)
+    }
 }
 
 const _configureLayout = ( app ) => {
@@ -152,7 +232,8 @@ const _configureLayout = ( app ) => {
     let contentViewport  = {
         top     : 0, 
         height  : screen.height, 
-        width   : screen.width
+        width   : screen.width,
+        bottom  : screen.height
     }
     
     if( visualElements.topNav ){  
@@ -165,54 +246,44 @@ const _configureLayout = ( app ) => {
     if( visualElements.bottomNav ){
         let bottomNav = visualElements.bottomNav( screen )
         contentViewport.height -= bottomNav.height
+        contentViewport.bottom -= bottomNav.height
+        bottomNav.top = contentViewport.bottom
         $('#bottomNav').css( bottomNav )
     }
     
-    $('#content').css( contentViewport )
-
-    leftTopCss = {
-        top  : contentViewport.top, 
-        height : contentViewport.height, 
-        width  : contentViewport.width / 2 
-    } 
-    $('#leftTop').css( leftTopCss )
-
+    if($('#content').length)  $('#content').css( contentViewport )
+    _contentInnerLayout(contentViewport, screen)
 }
-
-let bottomNavCss = screen => {
-    let height = screen.orientation === 'portrait' ? 55 : 30
-    return {
-        top: screen.height - height, 
-        left: 0, 
-        height 
-    }
-}
-
-let topNavCss = screen => {
-    return {
-        top: 0,  
-        left: 0, 
-        height: 55 
-    }
-}
-
 
 const uiFrame = function( app ){
-
     app.ui.visualElements = {
-        topNav      : topNavCss, 
-        bottomNav   : bottomNavCss, 
+        topNav          : topNavCss, 
+        bottomNav       : bottomNavCss, 
+        rightOrBottom   : bottomRightCss
     }   
 
     _configureLayout( app )
     $(window).resize(()=> {
         _configureLayout( app )
     })
+   return app
 
 }
 
+
+
 const addAppFrameFeature = function( app ){
+    debugger
+
+    Object.defineProperty(app.ui, 'screen', { get: function(){
+        return new this.geometry.Rectangle({
+            height:  $( window ).height(),
+            width: $( window ).width()
+        })
+    }})
+
     uiFrame( app )
+    require('./bottomNav').addFeature( app )
     return app
 }
 
@@ -221,7 +292,85 @@ module.exports = {
     addAppFrameFeature
 }
 
-},{}],4:[function(require,module,exports){
+},{"./bottomNav":3,"./uiElement":5}],5:[function(require,module,exports){
+"use strict"
+
+const UiElement = function( options ){
+
+   this.container = options.container
+
+}
+
+module.exports = {
+   UiElement
+}
+},{}],6:[function(require,module,exports){
+"use strict"
+
+
+const addGraphUiFeature = function(app) {
+
+    debugger
+
+}
+
+module.exports = {
+    addGraphUiFeature
+}
+
+},{}],7:[function(require,module,exports){
+/******************************************************************************
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ *
+ * ***************************************************************************/
+"use strict"
+ /****************************************************************************/
+const sections = [
+    window, 
+    '#viewPort', 
+    '#visualCanvas'
+]
+
+const inputField = ({
+    icon,
+    inputID,  
+    placeholder
+}) => [ `<div class="w3-row w3-section">`, 
+            `<div class="w3-col" style="width:50px"><i class="w3-xxlarge ${icon}"></i></div>`, 
+            `<div class="w3-rest">`, 
+            `<input class="w3-input w3-border" id='${inputID}' `, 
+            `name="first" type="text" placeholder="${placeholder}">`, 
+            `</div>`, 
+        `</div>` ].join('')
+
+
+const triggers = function( app ){
+
+    let createTrigger = (htmlID, action) => {
+        $(`#${htmlID}`).click(action)
+    }
+    app.ui.addFeature({label: 'createTrigger', method: createTrigger})
+    app.ui.addFeature({label: 'createInput', method: inputField})
+
+}
+
+const addUiComponent = function( app ){
+    app.featureSystem.addComponent({label: 'ui'})
+    require('../../common/geometry/main').addModule(app.ui)
+    triggers( app )
+    require('./frame/main').addAppFrameFeature( app )
+    require('./modal/main').addModalFeature(app)
+    require('./graphUi').addGraphUiFeature(app)
+    return app
+}
+
+module.exports = {
+   addUiComponent 
+}
+
+},{"../../common/geometry/main":12,"./frame/main":4,"./graphUi":6,"./modal/main":8}],8:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -252,59 +401,62 @@ module.exports = {
     addModalFeature
 }
 
-},{}],5:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
  *
+ * client side entry point 
  *
  * ***************************************************************************/
 "use strict"
-
  /****************************************************************************/
-const addModalFeature = require('./modal').addModalFeature
- /****************************************************************************/
-const sections = [
-    window, 
-    '#viewPort', 
-    '#visualCanvas'
-]
-
-const inputField = ({
-    icon,
-    inputID,  
-    placeholder
-}) => [ `<div class="w3-row w3-section">`, 
-            `<div class="w3-col" style="width:50px"><i class="w3-xxlarge ${icon}"></i></div>`, 
-            `<div class="w3-rest">`, 
-            `<input class="w3-input w3-border" id='${inputID}' `, 
-            `name="first" type="text" placeholder="${placeholder}">`, 
-            `</div>`, 
-        `</div>` ].join('')
 
 
-const ui = function( app ){
 
-    let createTrigger = (htmlID, action) => {
-        $(`#${htmlID}`).click(action)
+
+
+const tripDisplay = function( clientApp ){
+    let nodes = new vis.DataSet([
+        {id: 1, label: 'Berlin'}, 
+        {id: 2, label: 'Prague'}, 
+        {id: 3, label: 'venice'},
+        {id: 4, label: 'Bologna'}
+    ])
+
+    let edges = new vis.DataSet([
+        {from: 1, to: 2}, 
+        {from: 2, to: 3, label:'Lufthansa (152$)'}, 
+        {from: 3, to: 4}
+    ])
+
+    let container = document.getElementById('visualCanvas')
+
+    let data = {
+        nodes, 
+        edges
     }
-    app.ui.addFeature({label: 'createTrigger', method: createTrigger})
-    app.ui.addFeature({label: 'createInput', method: inputField})
 
-    addModalFeature(app)
-}
+    let options = {
+        nodes   : {
+            shadow:true, 
+            font: '15px yellow'
+        }, 
+        edges   : {
+            arrows  : {
+                to: true
+            }
+        }
+    }
 
-const addUiComponent = function( app ){
-    app.addComponent({label: 'ui'})
-    ui( app )
-    require('./appFrame').addAppFrameFeature( app )
+    let trip = new vis.Network(container, data, options)
 }
 
 module.exports = {
-   addUiComponent 
+    tripDisplay
 }
 
-},{"./appFrame":3,"./modal":4}],6:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -313,7 +465,6 @@ module.exports = {
  *
  * ***************************************************************************/
 "use strict"
-const showModal = require('../ui/modal').showModal
  /****************************************************************************/
 
 const getUserInfo = function( callback ){
@@ -325,8 +476,6 @@ const getUserInfo = function( callback ){
         }
             })
 }
-
-
  
 const user = (function(){
 
@@ -357,7 +506,7 @@ const user = (function(){
 
 
 
-const addLoginFeature = function( app ){
+const addUserManagement = function( app ){
 
     const userNameInput = app.ui.createInput({
         icon        : 'fa fa-user', 
@@ -380,7 +529,7 @@ const addLoginFeature = function( app ){
     ].join('')
 
 
-    app.addComponent({label: 'userManagement'})
+    app.featureSystem.addComponent({label: 'userManagement'})
 
     let authenticateUser = function({userHandle, password}){
         let userInfoQuery = { userHandle, password }
@@ -424,11 +573,10 @@ const addLoginFeature = function( app ){
 }
 
 module.exports = {
-    addLoginFeature, 
-    user
+    addUserManagement
 }
 
-},{"../ui/modal":4}],7:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -437,100 +585,134 @@ module.exports = {
  * 
  * ***************************************************************************/
 "use strict"
- /****************************************************************************/
-const Feature = function( options ){
+ /****************************************************************************//*****************************************************************************/
+"use strict"
+/*****************************************************************************/
 
-    this.method     = null
-    this.label      = null
-    this.mountFile  = null
+class Feature {
 
-    if( options.method ){
-        this.label = options.method.constructor.name
-        this.method = options.method
+    constructor( options ){
+        this.label          = options.label
+        this.implemented    = options.implemented || false
+        this.method         = options.method || false
     }
-    if (options.label)      this.label      = options.label
-    if (options.mountFile)  this.mountFile  = options.mountFile 
 
 }
-const AppComponent = function( componentDefinition ) {
 
-    let _features = new Map()
+function AppComponent( componentDefinition ){
+
     this.label = componentDefinition.label
+    let _features = new Map()
 
-    if('methods' in componentDefinition){
-        Object.keys(componentDefinition.methods).forEach((key, index)=>{
-            if(key === 'configure') return 
-            _features[key] = true
-            this[key] = componentDefinition.methods[key]
-        })
+    if('methods' in componentDefinition) {
+        Object.keys(componentDefinition.methods).forEach(
+            (key, index)=>{
+                if(key === 'configure') return
+                _features[key] = true
+                this[key] = componentDefinition.methods[key]
+            })
     }
 
-    this.addFeature =  feature => {
-        try {
-            let newFeature = new Feature(feature)
-            _features.set(newFeature.label, newFeature)
-        } catch (err){
-            throw err
-        } finally{
-            return this 
-        }
+    this.addFeature =  function(feature){
+        if(!('label' in feature)) throw 'error in feature definition'
+        if(_features.has(feature.label)) throw "feature already exists"
+        _features.set( feature.label, feature)
+        if('method' in feature) this[ feature.label ] = feature.method
     }
-
 }
 
 const featureSystem = function( app ){
 
-    let _features = new Map()
-    let _components = new Map()
+    let _features       = new Map()
+    let _components     = new Map()
+    let _reqMajor       = 0
+    let _requirements   = new Map()
 
     return {
-        get listFeatures(){
-            let featureList = {}
-            _features.forEach((feature, featureTag)=>{
-                featureList[featureTag] = feature
+
+        get list()  {
+            let features = {}
+            _features.forEach((value, key)=>{
+                features[key] = value
             })
-            return featureList
-        }, 
+            return features
+        },
 
-        addComponent: function( componentInfo ){
-            if(!('label' in componentInfo )) throw "Unable to find label property in component definition"
-            let component = new AppComponent( componentInfo )
-            _components.set(componentInfo.label, component)
-            app[componentInfo.label] = component
-            return app
-        }, 
+        implements  : featureLabel => _features.has(featureLabel), 
 
-        addFeature: function ( feature ) {
-            try {
-                let newFeature = new Feature(feature)
-                _features.set( newFeature.label, newFeature)
-                if(newFeature.method) app[feature.label] = newFeature.method
-            } catch ( err ){
-                throw "unable to create new feature"
-            } finally {
-                return app
+        addRequirement  : function({
+            req, 
+            parentReq
+        }) {
+            if( parentReq === undefined || parentReq === null){
+                _reqMajor += 1
+                _requirements.set(  _reqMajor, req)
             }
-       }, 
+        },
 
-       implements: function(featureLabel){
-            return _features.has(featureLabel)
-       }
+        includes: featureName => {
+            if(_features.has(featureName)) return _features.get(featureName)
+            return false
+        },
+
+        addComponent : function( componentInfo ){
+            let newComponent = new AppComponent( componentInfo )
+            _components.set(newComponent.label, newComponent)
+            app[newComponent.label] = newComponent 
+        }, 
+
+        add : function( feature ){
+            if(!('label' in feature)) throw 'error in feature definition'
+            if(_features.has(feature.label)) throw "feature already exists"
+            _features.set( feature.label, feature)
+            if('method' in feature) app[ feature.label ] = feature.method
+        }
     }
 }
 
 const mountFeatureSystem = function( app ){
 
-    let featureModule   = featureSystem( app )
-    app.addFeature      = featureModule.addFeature
-    app.addComponent    = featureModule.addComponent
-    app.implements      = featureModule.implements
-    Object.defineProperty(app, 'features', {get: ()=>featureSystem.listFeatures})
+    let features = featureSystem( app )
+    Object.defineProperty( app, 'features', {get: () => features.list})
+    app.featureSystem = {}
+    app.featureSystem.addRequirement = features.addRequirement        
+    app.featureSystem.addComponent   = features.addComponent
+    app.featureSystem.Feature = Feature
+    app.featureSystem.addFeature = features.add
+    app.featureSystem.implements = features.implements
     return app
-
 }
 
 module.exports = {
     mountFeatureSystem
 }
 
-},{}]},{},[1]);
+},{}],12:[function(require,module,exports){
+"use strict"
+
+const addModule  = function( app ){
+   app.geometry = {}
+   app.geometry.Rectangle = require('./rectangle').Rectangle
+}
+
+module.exports = {
+   addModule
+}
+},{"./rectangle":13}],13:[function(require,module,exports){
+"use strict"
+ /****************************************************************************/
+  
+let Rectangle = function(options){
+      this.top = options.top || 0
+      this.left = options.left || 0
+      this.height = options.height || 0
+      this.width = options.width || 0
+      this.right = this.left + this.width
+      this.bottom = this.top + this.height
+      this.orientation = this.height > this.width ? 'portrait' : 'landscape' 
+}
+
+module.exports = {
+   Rectangle
+}
+},{}]},{},[2]);

@@ -30,7 +30,7 @@ const appRootModule = function( app ) {
     }
 }
 const addAppRoot = function( app ){
-    app.addComponent({
+    app.featureSystem.addComponent({
         label: 'httpRoot', 
         methods: appRootModule( app )
     })

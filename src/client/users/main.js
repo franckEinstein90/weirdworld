@@ -6,7 +6,6 @@
  *
  * ***************************************************************************/
 "use strict"
-const showModal = require('../ui/modal').showModal
  /****************************************************************************/
 
 const getUserInfo = function( callback ){
@@ -18,8 +17,6 @@ const getUserInfo = function( callback ){
         }
             })
 }
-
-
  
 const user = (function(){
 
@@ -50,7 +47,7 @@ const user = (function(){
 
 
 
-const addLoginFeature = function( app ){
+const addUserManagement = function( app ){
 
     const userNameInput = app.ui.createInput({
         icon        : 'fa fa-user', 
@@ -73,7 +70,7 @@ const addLoginFeature = function( app ){
     ].join('')
 
 
-    app.addComponent({label: 'userManagement'})
+    app.featureSystem.addComponent({label: 'userManagement'})
 
     let authenticateUser = function({userHandle, password}){
         let userInfoQuery = { userHandle, password }
@@ -117,6 +114,5 @@ const addLoginFeature = function( app ){
 }
 
 module.exports = {
-    addLoginFeature, 
-    user
+    addUserManagement
 }

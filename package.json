@@ -5,12 +5,14 @@
   "main": "weirdworld.js",
   "scripts": {
     "start": "node app.js",
+    "buildClient": "browserify src/client/main.js -o public/javascripts/bundle.js",
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "_moduleAliases": {
-    "@appEngine"  : "src/server/appEngine", 
+    "@appEngine": "src/server/appEngine",
     "@src": "src",
+    "@common": "src/common",
     "@routes": "src/routes",
     "@events": "src/events",
     "@utils": "src/utils",
@@ -38,7 +40,9 @@
     "njwt": "^1.0.0",
     "nnode": "^0.3.3",
     "node-cron": "^2.0.3",
+    "pidusage": "^2.0.18",
     "request": "^2.88.0",
+    "socket.io": "^2.3.0",
     "sortablejs": "^1.10.2",
     "sqlite3": "^4.1.1",
     "vis-network": "^7.3.4",

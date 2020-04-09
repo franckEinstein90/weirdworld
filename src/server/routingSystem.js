@@ -32,6 +32,7 @@ const corsOptions = {
 
 const routingSystem = function( app ){
     return new Promise((resolve, reject)=>{
+        app.routers = []
         return resolve( app )
     })
 }

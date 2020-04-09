@@ -10,7 +10,6 @@
 
 
 const getServerData = function( route, query ){
-    debugger
     return new Promise((resolve, reject)=>{
         $.ajax({
                 method: "GET",
@@ -36,7 +35,7 @@ let testServerDataFetch = function(dataFetchFunction){
 const addDataFetchFeature = function( app ){ //adds ajax data fetch
 
     return new Promise((resolve, rejet) => {
-        app.addFeature({
+        app.featureSystem.addFeature({
             label: 'serverFetch', 
             method: (route, query) => getServerData(route, query)
         })

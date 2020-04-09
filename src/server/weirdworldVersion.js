@@ -17,7 +17,7 @@ const weirdWorldVersion = function( weirdworld ){
                 return reject( err )
             }
             weirdworld.version = data.version
-            weirdworld.addFeature({
+            weirdworld.featureSystem.addFeature({
                 label: 'versioning'
             })
             weirdworld.versionTag = [

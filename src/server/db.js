@@ -103,15 +103,14 @@ const addLocalDatabase = function( app ){
     .then( result => {
 
             if(!result) return app
-            app.addComponent({
+            app.featureSystem.addComponent({
                 label: 'localDb', 
                 methods: db
                 })
             return app
 
-     })
-     .catch( err => {
-          return resolve(app)
+     }).catch( err => {
+          return app 
      })
 }
 

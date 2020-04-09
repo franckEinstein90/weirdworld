@@ -16,23 +16,23 @@ const path = require('path')
 const configExpress = function( app ) {
     
 
-    app.expressStack =  express()
+    app.express =  express()
 
     require('@viewSystem/viewSystem').viewSystem({
-        app     : app.expressStack,  
+        app     : app.express,  
         root    : app.root,
-        layoutsDir:  path.join(app.root,'views','layouts/'),
-        partialsDir: path.join(app.root,'views','partials/')
+        layoutsDir:  path.join(app.metadata.root,'views','layouts/'),
+        partialsDir: path.join(app.metadata.root,'views','partials/')
     })
 
-    app.expressStack.use(cookieParser());
-    app.expressStack.use(express.json())
-    app.expressStack.use(express.urlencoded({
+    app.express.use(cookieParser());
+    app.express.use(express.json())
+    app.express.use(express.urlencoded({
         extended: false
     }))
 
-    app.expressStack.use(express.static(app.staticFolder))
-    app.expressStack.use(favicon(app.faviconPath))
+    app.express.use(express.static(app.metadata.staticFolder))
+    app.express.use(favicon(app.metadata.faviconPath))
 
     return app
 }

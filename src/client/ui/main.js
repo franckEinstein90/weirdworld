@@ -5,9 +5,6 @@
  *
  * ***************************************************************************/
 "use strict"
-
- /****************************************************************************/
-const addModalFeature = require('./modal').addModalFeature
  /****************************************************************************/
 const sections = [
     window, 
@@ -28,7 +25,7 @@ const inputField = ({
         `</div>` ].join('')
 
 
-const ui = function( app ){
+const triggers = function( app ){
 
     let createTrigger = (htmlID, action) => {
         $(`#${htmlID}`).click(action)
@@ -36,13 +33,16 @@ const ui = function( app ){
     app.ui.addFeature({label: 'createTrigger', method: createTrigger})
     app.ui.addFeature({label: 'createInput', method: inputField})
 
-    addModalFeature(app)
 }
 
 const addUiComponent = function( app ){
-    app.addComponent({label: 'ui'})
-    ui( app )
-    require('./appFrame').addAppFrameFeature( app )
+    app.featureSystem.addComponent({label: 'ui'})
+    require('../../common/geometry/main').addModule(app.ui)
+    triggers( app )
+    require('./frame/main').addAppFrameFeature( app )
+    require('./modal/main').addModalFeature(app)
+    require('./graphUi').addGraphUiFeature(app)
+    return app
 }
 
 module.exports = {

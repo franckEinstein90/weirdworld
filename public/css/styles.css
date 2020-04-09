@@ -3,18 +3,27 @@
 @import "sidebar.css";
 
 
-#leftTop{
+#leftOrTop {
     position: absolute; 
-    background-color: blue;
+    background-color: var(--sky);
     width: 100%; 
 }
+#rightOrBottom{
+    position: absolute; 
+    background-color: var(--peaky);
+    width: 100%; 
+}
+
+
+
+
 #userPane{
   flex:50%;
   max-width:100%;
+  padding-left:10px; 
   padding-right:10px; 
   height:800px;
   font-size:19px;
-  margin-right:20px;  
 }
 
 .visualCmdIcon{
@@ -131,14 +140,10 @@
   opacity: 0; 
 }
 
-.topPanel{
-  padding-top:10px;
-}
 
 /*styles for user list of trips*/
 
 .tripList h2 {
-    margin-top: 20px; 
     color: var(--main);
     text-align: center; 
     font-size: 1.5em;  
@@ -149,7 +154,6 @@
 
 .tripList ul{
     padding-right: 5px; 
-    padding-top: 5px; 
     color: var(--pop);
     list-style-type: none;
     border: 1px inset var(--pop);  

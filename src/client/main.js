@@ -12,6 +12,7 @@ $(function() {
 
 
     let weirdWorldClient = { 
+
     }
 
     weirdWorldClient.socket = io()
@@ -19,7 +20,8 @@ $(function() {
     require('./ui/main').addUiComponent( weirdWorldClient )
     require('./io/main').addDataFetchFeature( weirdWorldClient ) 
     require('./users/main').addUserManagement( weirdWorldClient )
-    require('./ui/tripVisual').tripDisplay( weirdWorldClient) 
+    require('./ui/tripVisual').tripDisplay( weirdWorldClient)
+    debugger   
 
 })
 

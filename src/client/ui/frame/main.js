@@ -87,6 +87,7 @@ const _contentInnerLayout = ( contentViewport, screen) => {
         width: contentViewport.width/2, 
         left: contentViewport.width/2 
     } 
+
     if($('#rightOrBottom').length){
         if (screen.orientation === 'portrait'){
             bottomOrRightCss.top    = contentViewport.top + (contentViewport.height / 2) 
@@ -134,13 +135,12 @@ const uiFrame = function( app ){
     app.ui.visualElements = {
         topNav          : topNavCss, 
         bottomNav       : bottomNavCss, 
-        rightOrBottom   : bottomRightCss
+        rightOrBottom   : bottomRightCss,
+        resize          : function(){
+            _configureLayout( app )
+        }
     }   
-
-    _configureLayout( app )
-    $(window).resize(()=> {
-        _configureLayout( app )
-    })
+   _configureLayout( app )
    return app
 
 }

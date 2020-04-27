@@ -35,8 +35,19 @@ const triggers = function( app ){
 
 }
 
+
+const resizeUI = function( app ){
+    app.ui.visualElements.resize()
+    app.threeDScene.resize()
+}
+
 const addUiComponent = function( app ){
     app.featureSystem.addComponent({label: 'ui'})
+    $(window).resize(()=> {
+        resizeUI( app )
+    })
+   
+
     require('../../common/geometry/main').addModule(app.ui)
     triggers( app )
     require('./frame/main').addAppFrameFeature( app )

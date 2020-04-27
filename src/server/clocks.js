@@ -9,7 +9,6 @@ const Event = require('@common/clock/events').Event
 
 /* clock ticks every minute */
 const setAliveClock = function( app ){
-
    let showLife = function(){
       app.processStats.update() 
       .then( _ => {

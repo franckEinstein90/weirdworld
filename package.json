@@ -45,6 +45,7 @@
     "socket.io": "^2.3.0",
     "sortablejs": "^1.10.2",
     "sqlite3": "^4.1.1",
+    "three": "^0.115.0",
     "vis-network": "^7.3.4",
     "winston": "^3.2.1"
   }

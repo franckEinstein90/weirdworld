@@ -31,6 +31,10 @@ const bottomNav = function( app ){
         updateTicker()
     })
 
+    $("#bottomNav").click(function( event ){
+        $("#bottomNav").focus()
+    })
+
     updateTicker()
     return app
 }

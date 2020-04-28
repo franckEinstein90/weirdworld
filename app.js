@@ -45,6 +45,7 @@ require('@src/server/appEngine').configApp( weirdWorld )
 .then( require('@server/process').addProcessStatsFeature )
 .then( app => { //final preps before launch
     require('@server/clocks').setClocks( app )
+    require('@server/dev/commands').devCommands( app )
     return app
 })
 .then( app => {

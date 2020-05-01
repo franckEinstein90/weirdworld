@@ -1,58 +1,65 @@
 "use strict"
 
-const divPerimeter = require('../ui/frame/css').divPerimeter
+const divPerimeter = require('../ui/frame/css').divPerimeter; 
 
+const GameObject = function( opt ){
+
+    this.x = opt.x || 0;
+    this.y = opt.y || 0;
+    this.size = opt.size || 30; 
+    this.radius = this.size / 2; 
+    this.angle = 90 / 180 * Math.PI; 
+}
+
+GameObject.prototype.draw = function( context ){
+    context.beginPath()
+    context.moveTo(
+        this.x + this.radius * Math.cos(this.angle), 
+        this.y - this.radius * Math.sin(this.angle) 
+    );
+    context.lineTo(
+        this.x - this.radius * (Math.cos(this.angle) + Math.sin(this.angle)), 
+        this.y + this.radius * (Math.sin(this.angle) - Math.cos(this.angle))
+    );
+    context.lineTo(
+        this.x - this.radius * (Math.cos(this.angle) - Math.sin(this.angle)), 
+        this.y + this.radius * (Math.sin(this.angle) + Math.cos(this.angle))
+    );
+    context.closePath();
+}
 
 const appGame = function( app ){
 
-    let gameCanvasDimensions = divPerimeter("#playPanel")
+    let gameCanvasDimensions = divPerimeter("#playPanel"); 
     /** @type {HTMLCanvasElement} */
-    let canvas = document.getElementById('gameScreen')
-    let context = canvas.getContext('2d')
+    let canvas = document.getElementById('gameScreen'); 
+    let context = canvas.getContext('2d'); 
 
 
-    let ship = {
+    let ship = new GameObject({
         x: canvas.width /2, 
         y: canvas.height/2, 
         size: 30
-    }
-    ship.r = ship.size / 2, 
-    ship.a = 90 / 180 * Math.PI
+    });
 
     return {
 
         FPS: 30, 
+
         update: function(){
-            context.fillStyle = "red"
-            context.strokeStyle = 'red'
-            context.lineWidth = ship.size / 20
-            context.beginPath()
-            context.moveTo(
-                ship.x + ship.r * Math.cos(ship.a), 
-                ship.y - ship.r * Math.sin(ship.a) 
-            )
-            context.lineTo(
-                ship.x - ship.r * (Math.cos(ship.a) + Math.sin(ship.a)), 
-                ship.y + ship.r * (Math.sin(ship.a) - Math.cos(ship.a))
-            )
-            context.lineTo(
-                ship.x - ship.r * (Math.cos(ship.a) - Math.sin(ship.a)), 
-                ship.y + ship.r * (Math.sin(ship.a) + Math.cos(ship.a))
-            )
-            context.closePath()
-            context.stroke()
+            context.fillStyle = "red";
+            context.strokeStyle = 'red';
+            context.lineWidth = ship.size / 20;
+            ship.draw( context );
+            context.stroke();
         }
-
     }
-
 }
 
 const addGameModule = function( app ){
-
-   app.appGame = appGame(app)
-   setInterval(app.appGame.update, 1000/app.appGame.FPS)
-   return app
-
+   app.appGame = appGame(app);
+   setInterval(app.appGame.update, 1000 / app.appGame.FPS);
+   return app;
 }
 
 module.exports = {

@@ -21,7 +21,8 @@ body::-webkit-scrollbar {
     width: 100%;  
     position: absolute;
     z-index : 4;
-    color : var(--main);
+    color : var(--pop);
+    padding-left: 20px; 
     display : block;
     background-color : var(--sun); 
 } 

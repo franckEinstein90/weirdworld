@@ -6,20 +6,23 @@
 
 /******************************************************************************/
 
+const moment = require('moment')
 
 const bottomNav = function( app ){
 
     let msgs = {
         clientStatus: 'client loaded', 
         serverStatus: 'waiting for message', 
-        queryStatus: 'N/A'
+        queryStatus: 'N/A', 
+        time: moment()
     } 
 
     let updateTicker = () => {
         let statusBarContent = [
             `client: ${msgs.clientStatus}`, 
             `server: ${msgs.serverStatus}`, 
-            `query: ${msgs.queryStatus}`
+            `query: ${msgs.queryStatus}`, 
+            `time: ${msgs.time}`
         ].join(' | ')
         $('#bottomNav').text(statusBarContent)
     }

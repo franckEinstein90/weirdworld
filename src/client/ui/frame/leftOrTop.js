@@ -9,7 +9,6 @@ const layout = function( contentViewport, screen) {
         height  : contentViewport.height,
         width   : contentViewport.width
     } 
-
     if($('#leftOrTop').length){
         if (screen.orientation === 'portrait'){
             leftTopCss.top    = contentViewport.top
@@ -20,9 +19,10 @@ const layout = function( contentViewport, screen) {
         } 
         $('#leftOrTop').css( leftTopCss )
     }
-
-
-
+    let visualCanvasPerimeter = divPerimeter("#visualCanvas")
+    $('#playPanel').css({
+        height: leftTopCss.height - visualCanvasPerimeter.height 
+    })
     return leftTopCss
 }
 

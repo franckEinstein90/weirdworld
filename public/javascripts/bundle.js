@@ -50412,6 +50412,46 @@
 },{}],2:[function(require,module,exports){
 "use strict"
 
+const addAppDebugConsole = function( app ){
+
+    app.consoleMode = function(){
+        $('#console').css('display', 'visible')
+    }
+
+    let charBuffer = []
+    let out = (mode) => {
+        if(mode === 'keyCode') {
+            $('#console').text("> " +  charBuffer)
+        } else {
+            $('#console').text("> " +  String.fromCharCode(...charBuffer))
+        }
+    }
+
+
+    return {
+
+        keyInput: function(event){
+            if( event.which === 13 ) {
+                app.execute(String.fromCharCode(...charBuffer))
+                charBuffer.length = 0
+            }
+            else{
+                charBuffer.push(event.which)
+                out()
+        }
+            
+      }
+    }
+
+}
+
+    
+module.exports = {
+    addAppDebugConsole
+}
+},{}],3:[function(require,module,exports){
+"use strict"
+
 const addExecuteCommandFeature = function( app ){
     app.execute = function(command){
         if(command === 'refresh') {
@@ -50423,7 +50463,7 @@ module.exports = {
     addExecuteCommandFeature
 }
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -50474,7 +50514,7 @@ module.exports = {
     addDataFetchFeature
 } 
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -50487,9 +50527,13 @@ module.exports = {
 
 $(function() {
 
+    let modes = {
+        app: 'app', 
+        console: 'console window'
+    }
 
     let weirdWorldClient = { 
-
+        userMode : modes.app
     }
 
     weirdWorldClient.socket = io()
@@ -50498,39 +50542,19 @@ $(function() {
     require('./io/main').addDataFetchFeature( weirdWorldClient ) 
     require('./users/main').addUserManagement( weirdWorldClient )
     require('./ui/tripVisual').tripDisplay( weirdWorldClient)
-    require('./execute').addExecuteCommandFeature( weirdWorldClient ) 
-    weirdWorldClient.userMode = 'console'
+    require('./views/game').addGameModule( weirdWorldClient )
+    require('./execute').addExecuteCommandFeature( weirdWorldClient )
+    require('./appModes').addAppDebugConsole(weirdWorldClient)
 
-    weirdWorldClient.consoleMode = (function() {
-
-        let charBuffer = []
-        let out = (mode) => {
-            if(mode === 'keyCode') {
-                $('#console').text("> " +  charBuffer)
-            } else {
-                $('#console').text("> " +  String.fromCharCode(...charBuffer))
-            }
-        }
-
-        return {
-
-            keyInput: function(event){
-                if( event.which === 13 ) {
-                    weirdWorldClient.execute(String.fromCharCode(...charBuffer))
-                    charBuffer.length = 0
-                }
-                else{
-                    charBuffer.push(event.which)
-                    out()
-            }
-                
-          }
-        }
-
-    })()
-
+   
     $( document ).keypress(function( event ){
-        if(weirdWorldClient.userMode === 'console'){
+        if(weirdWorldClient.userMode === 'app'){
+            if(event.which === 106){ //go into console mode
+                weirdWorldClient.userMode = modes.console
+                weirdWorldClient.consoleMode()
+            }
+        }
+        else if(weirdWorldClient.userMode === 'console'){
             weirdWorldClient.consoleMode.keyInput(event)
        }
    })
@@ -50538,7 +50562,7 @@ $(function() {
 })
 
 
-},{"../common/features":14,"./execute":2,"./io/main":3,"./ui/main":9,"./ui/tripVisual":12,"./users/main":13}],5:[function(require,module,exports){
+},{"../common/features":18,"./appModes":2,"./execute":3,"./io/main":4,"./ui/main":12,"./ui/tripVisual":15,"./users/main":16,"./views/game":17}],6:[function(require,module,exports){
 /*******************************************************************************
  *  ui feature for bottom status bar of client app
  ******************************************************************************/
@@ -50589,7 +50613,54 @@ module.exports = {
     addFeature
 }
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
+"use strict"
+
+const divPerimeter = function(divID){
+    let height  =   $( divID ).height()
+    let width   =   $( divID ).width()
+    let orientation = height > width ? 'portrait' : 'landscape' 
+     return {
+        height,
+        width,
+        orientation
+    }
+}
+
+module.exports = {
+    divPerimeter
+}
+},{}],8:[function(require,module,exports){
+"use strict"
+
+const divPerimeter = require('./css').divPerimeter
+
+const layout = function( contentViewport, screen) {
+
+    let leftTopCss = {
+        top     : contentViewport.top, 
+        height  : contentViewport.height,
+        width   : contentViewport.width
+    } 
+
+    if($('#leftOrTop').length){
+        if (screen.orientation === 'portrait'){
+            leftTopCss.top    = contentViewport.top
+            leftTopCss.height = contentViewport.height / 2
+            leftTopCss.width =  contentViewport.width
+        } else {
+            leftTopCss.width = contentViewport.width / 2 
+        } 
+        $('#leftOrTop').css( leftTopCss )
+    }
+    return leftTopCss
+}
+
+module.exports = {
+   layout 
+}
+
+},{"./css":7}],9:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -50599,7 +50670,8 @@ module.exports = {
  * ***************************************************************************/
 "use strict"
  /****************************************************************************/
- const UIElement = require('./uiElement').UIElement
+const UIElement = require('./uiElement').UIElement
+const layout = require('./leftOrTop.js').layout
 
 const deviceRatios = [
     {id: 1, ratio: '4x3'}, 
@@ -50656,24 +50728,8 @@ const _screenDimensions = _ => {
 }
 const _contentInnerLayout = ( contentViewport, screen) => {
 
-    let leftTopCss = {
-        top     : contentViewport.top, 
-        height  : contentViewport.height,
-        width   : contentViewport.width
-    } 
- 
-    if($('#leftOrTop').length){
-        if (screen.orientation === 'portrait'){
-            leftTopCss.top    = contentViewport.top
-            leftTopCss.height = contentViewport.height / 2
-            leftTopCss.width =  contentViewport.width
-        } else {
-            leftTopCss.width = contentViewport.width / 2 
-        } 
-       $('#leftOrTop').css( leftTopCss )
-    }
-
-    let bottomOrRightCss = {
+   let leftTopCss = layout(contentViewport, screen)
+   let bottomOrRightCss = {
         top: leftTopCss.top,  
         height: contentViewport.height,
         width: contentViewport.width/2, 
@@ -50695,7 +50751,7 @@ const _contentInnerLayout = ( contentViewport, screen) => {
 
 const _configureLayout = ( app ) => {
 
-    let screen           = _screenDimensions()
+    let screen           = require('./css.js').divPerimeter( window )
     let visualElements   = app.ui.visualElements
     let contentViewport  = {
         top     : 0, 
@@ -50758,7 +50814,7 @@ module.exports = {
     addAppFrameFeature
 }
 
-},{"./bottomNav":5,"./uiElement":7}],7:[function(require,module,exports){
+},{"./bottomNav":6,"./css.js":7,"./leftOrTop.js":8,"./uiElement":10}],10:[function(require,module,exports){
 "use strict"
 
 const UiElement = function( options ){
@@ -50770,7 +50826,7 @@ const UiElement = function( options ){
 module.exports = {
    UiElement
 }
-},{}],8:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict"
 const THREE = require('three')
 
@@ -50822,7 +50878,7 @@ module.exports = {
     addGraphUiFeature
 }
 
-},{"./threeD/main":11,"three":1}],9:[function(require,module,exports){
+},{"./threeD/main":14,"three":1}],12:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -50885,7 +50941,7 @@ module.exports = {
    addUiComponent 
 }
 
-},{"../../common/geometry/main":15,"./frame/main":6,"./graphUi":8,"./modal/main":10}],10:[function(require,module,exports){
+},{"../../common/geometry/main":19,"./frame/main":9,"./graphUi":11,"./modal/main":13}],13:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -50916,7 +50972,7 @@ module.exports = {
     addModalFeature
 }
 
-},{}],11:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 "use strict"
 
 const THREE = require('three')
@@ -50999,7 +51055,7 @@ module.exports = {
     drawObjects
 }
 
-},{"three":1}],12:[function(require,module,exports){
+},{"three":1}],15:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -51054,7 +51110,7 @@ module.exports = {
     tripDisplay
 }
 
-},{}],13:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -51174,7 +51230,68 @@ module.exports = {
     addUserManagement
 }
 
-},{}],14:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
+"use strict"
+
+const divPerimeter = require('../ui/frame/css').divPerimeter
+
+
+const appGame = function( app ){
+
+    let gameCanvasDimensions = divPerimeter("#playPanel")
+    /** @type {HTMLCanvasElement} */
+    let canvas = document.getElementById('gameScreen')
+    let context = canvas.getContext('2d')
+
+
+    let ship = {
+        x: canvas.width /2, 
+        y: canvas.height/2, 
+        size: 30
+    }
+    ship.r = ship.size / 2, 
+    ship.a = 90 / 180 * Math.PI
+
+    return {
+
+        FPS: 30, 
+        update: function(){
+            context.fillStyle = "red"
+            context.strokeStyle = 'red'
+            context.lineWidth = ship.size / 20
+            context.beginPath()
+            context.moveTo(
+                ship.x + ship.r * Math.cos(ship.a), 
+                ship.y - ship.r * Math.sin(ship.a) 
+            )
+            context.lineTo(
+                ship.x - ship.r * (Math.cos(ship.a) + Math.sin(ship.a)), 
+                ship.y + ship.r * (Math.sin(ship.a) - Math.cos(ship.a))
+            )
+            context.lineTo(
+                ship.x - ship.r * (Math.cos(ship.a) - Math.sin(ship.a)), 
+                ship.y + ship.r * (Math.sin(ship.a) + Math.cos(ship.a))
+            )
+            context.closePath()
+            context.stroke()
+        }
+
+    }
+
+}
+
+const addGameModule = function( app ){
+
+   app.appGame = appGame(app)
+   setInterval(app.appGame.update, 1000/app.appGame.FPS)
+   return app
+
+}
+
+module.exports = {
+    addGameModule
+}
+},{"../ui/frame/css":7}],18:[function(require,module,exports){
 /******************************************************************************
  * WeirdWorld - By FranckEinstein90
  * 20200000000000000000000000000000
@@ -51285,7 +51402,7 @@ module.exports = {
     mountFeatureSystem
 }
 
-},{}],15:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict"
 
 const addModule  = function( app ){
@@ -51296,7 +51413,7 @@ const addModule  = function( app ){
 module.exports = {
    addModule
 }
-},{"./rectangle":16}],16:[function(require,module,exports){
+},{"./rectangle":20}],20:[function(require,module,exports){
 "use strict"
  /****************************************************************************/
   
@@ -51313,4 +51430,4 @@ let Rectangle = function(options){
 module.exports = {
    Rectangle
 }
-},{}]},{},[4]);
+},{}]},{},[5]);

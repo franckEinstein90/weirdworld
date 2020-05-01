@@ -7,7 +7,8 @@
  * ***************************************************************************/
 "use strict"
  /****************************************************************************/
- const UIElement = require('./uiElement').UIElement
+const UIElement = require('./uiElement').UIElement
+const layout = require('./leftOrTop.js').layout
 
 const deviceRatios = [
     {id: 1, ratio: '4x3'}, 
@@ -64,24 +65,8 @@ const _screenDimensions = _ => {
 }
 const _contentInnerLayout = ( contentViewport, screen) => {
 
-    let leftTopCss = {
-        top     : contentViewport.top, 
-        height  : contentViewport.height,
-        width   : contentViewport.width
-    } 
- 
-    if($('#leftOrTop').length){
-        if (screen.orientation === 'portrait'){
-            leftTopCss.top    = contentViewport.top
-            leftTopCss.height = contentViewport.height / 2
-            leftTopCss.width =  contentViewport.width
-        } else {
-            leftTopCss.width = contentViewport.width / 2 
-        } 
-       $('#leftOrTop').css( leftTopCss )
-    }
-
-    let bottomOrRightCss = {
+   let leftTopCss = layout(contentViewport, screen)
+   let bottomOrRightCss = {
         top: leftTopCss.top,  
         height: contentViewport.height,
         width: contentViewport.width/2, 
@@ -103,7 +88,7 @@ const _contentInnerLayout = ( contentViewport, screen) => {
 
 const _configureLayout = ( app ) => {
 
-    let screen           = _screenDimensions()
+    let screen           = require('./css.js').divPerimeter( window )
     let visualElements   = app.ui.visualElements
     let contentViewport  = {
         top     : 0, 

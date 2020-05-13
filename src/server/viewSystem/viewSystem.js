@@ -8,12 +8,11 @@
 "use strict"
 
 /*****************************************************************************/
-const hbs = require('express-handlebars')
+const hbs = require('express-handlebars');
 /*****************************************************************************/
 
 const viewSystem = function({
     app,
-    root,
     layoutsDir,
     partialsDir
 }) {
@@ -22,11 +21,10 @@ const viewSystem = function({
         defaultLayout: 'main',
         layoutsDir,
         partialsDir
-    }))
+    }));
     app.set('view engine', 'hbs');
-
 }
 
 module.exports = {
     viewSystem
-}
+};

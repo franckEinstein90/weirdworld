@@ -1,12 +1,19 @@
-"use strict"
-
+/******************************************************************************
+ * WeirdWorld - By FranckEinstein90
+ * 20200000000000000000000000000000
+ *
+ * client side entry point 
+ *
+ * ***************************************************************************/
+"use strict";
+/****************************************************************************/
 const addAppDebugConsole = function( app ){
 
     app.consoleMode = function(){
         $('#console').css('display', 'visible')
     }
 
-    let charBuffer = []
+    let charBuffer = [];
     let out = (mode) => {
         if(mode === 'keyCode') {
             $('#console').text("> " +  charBuffer)

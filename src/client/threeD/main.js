@@ -11,7 +11,7 @@
     
        return{
          init: function(){
-            _container = document.querySelector('#content')
+            _container = document.querySelector('#rightOrBottom')
     
             _renderer = new THREE.WebGLRenderer( {antialias: true} )
             _renderer.setSize( _container.clientWidth, _container.clientHeight)

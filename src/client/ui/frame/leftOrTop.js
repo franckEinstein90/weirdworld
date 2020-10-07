@@ -1,6 +1,6 @@
 "use strict"
 
-const divPerimeter = require('./css').divPerimeter
+const divPerimeter = require('./utils/css').divPerimeter
 
 const layout = function( contentViewport, screen) {
 

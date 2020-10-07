@@ -1,6 +1,6 @@
 "use strict"
 
-const divPerimeter = require('../ui/frame/css').divPerimeter; 
+const divPerimeter = require('../ui/frame/utils/css').divPerimeter; 
 
 const GameObject = function( opt ){
 
@@ -51,6 +51,7 @@ const appGame = function( app ){
             context.strokeStyle = 'red';
             context.lineWidth = ship.size / 20;
             ship.draw( context );
+            
             context.stroke();
         }
     }

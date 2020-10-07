@@ -7,65 +7,37 @@
  * ***************************************************************************/
 "use strict"
  /****************************************************************************/
-const UIElement = require('./uiElement').UIElement
-const layout = require('./leftOrTop.js').layout
+const UIElement = require('./uiElement').UIElement; 
+const cssDef = require('./utils/cssDef').cssDef; 
+const leftOrTopLayout = require('./leftOrTop.js').layout; 
+const divPerimeter = require('./utils/css.js').divPerimeter;
 
 const deviceRatios = [
     {id: 1, ratio: '4x3'}, 
     {id: 2, ratio: '16x9'}, 
     {id: 3, ratio: '3x2'}
 ]
-   
-const cssDef = options => screen => {
-    let assign = (value, property) => {
-        if(typeof value[property] === 'function'){
-            return value[property](screen)
-        } else {
-            return value[property]
-        }
-    }
-    let height = 0
-    let width = 0
-    if(options.width) width = assign( options, 'width')
-    if(options.height) height = assign( options, 'height')
-    return {
-        left: 0, 
-        top: 0, 
-        width, 
-        height
-    }    
-}
 
-let bottomNavCss = cssDef({ 
+const bottomNavCss = cssDef({ 
     width: s => s.width, 
     height: s => s.orientation === 'portrait' ? 55 : 30 
 })
 
-let contentCss = cssDef({
-    width: s => s.width
-})
-
-let topNavCss    = cssDef({
+const topNavCss    = cssDef({
     width: s => s.width,
     height:55
 })
 
-let bottomRightCss = cssDef({})
+const leftNavCss = cssDef({
+    width: 40, 
+    height: s => s.height
+})
 
 
-const _screenDimensions = _ => {
-    let height =  $( window ).height()
-    let width = $( window ).width()
-    let orientation = height > width ? 'portrait' : 'landscape' 
-     return {
-        height,
-        width,
-        orientation
-    }
-}
+
 const _contentInnerLayout = ( contentViewport, screen) => {
 
-   let leftTopCss = layout(contentViewport, screen)
+   let leftTopCss = leftOrTopLayout(contentViewport, screen);
    let bottomOrRightCss = {
         top: leftTopCss.top,  
         height: contentViewport.height,
@@ -88,15 +60,15 @@ const _contentInnerLayout = ( contentViewport, screen) => {
 
 const _configureLayout = ( app ) => {
 
-    let screen           = require('./css.js').divPerimeter( window )
-    let visualElements   = app.ui.visualElements
+    let screen           = divPerimeter( window ) ;
+    let visualElements   = app.ui.visualElements ;
     let contentViewport  = {
         top     : 0, 
         height  : screen.height, 
         width   : screen.width,
         bottom  : screen.height
     }
-    
+     
     if( visualElements.topNav ){  
         let topNav = visualElements.topNav( screen )
         contentViewport.top     += topNav.height
@@ -111,23 +83,29 @@ const _configureLayout = ( app ) => {
         bottomNav.top = contentViewport.bottom
         $('#bottomNav').css( bottomNav )
     }
-    
+    debugger 
+    if(visualElements.leftNav) {
+        debugger
+    }
+
+
     if($('#content').length)  $('#content').css( contentViewport )
     _contentInnerLayout(contentViewport, screen)
 }
 
 const uiFrame = function( app ){
+
     app.ui.visualElements = {
         topNav          : topNavCss, 
-        bottomNav       : bottomNavCss, 
-        rightOrBottom   : bottomRightCss,
+        bottomNav       : bottomNavCss,
+        leftNav         : leftNavCss,  
+        rightOrBottom   : cssDef({}),
         resize          : function(){
             _configureLayout( app )
         }
     }   
    _configureLayout( app )
    return app
-
 }
 
 

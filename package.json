@@ -36,7 +36,7 @@
     "express-session": "^1.17.0",
     "mathjs": "^6.6.0",
     "module-alias": "^2.2.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "njwt": "^1.0.0",
     "nnode": "^0.3.3",
     "node-cron": "^2.0.3",

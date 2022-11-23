@@ -42,7 +42,7 @@
     "node-cron": "^2.0.3",
     "pidusage": "^2.0.18",
     "request": "^2.88.0",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.5.0",
     "sortablejs": "^1.10.2",
     "sqlite3": "^4.1.1",
     "three": "^0.115.0",

@@ -25,7 +25,7 @@
   "author": "franckeinstein90",
   "license": "ISC",
   "dependencies": {
-    "@okta/oidc-middleware": "^3.0.0",
+    "@okta/oidc-middleware": "^5.0.0",
     "appversion": "^1.7.1",
     "config": "^3.2.5",
     "cookie-parser": "^1.4.4",
